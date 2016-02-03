@@ -3,7 +3,11 @@
 
 def lr(d):
     nl = []
-    while n not in nl:
+    n = 1
+    while n and n not in nl:
+       nl.append(n)
+       n = (n % d) * 10
+    return len(nl) - nl.index(n) if n else 0
 
 
 mv = 0
