@@ -3,17 +3,26 @@
 
 
 def digits(n, b):
-    return []
+    ds = []
+
+    while n:
+        ds.append(n%b)
+        n = n // b
+
+    if not ds:
+        ds = [0]
+
+    return ds
 
 
 def dp(n):
     ds = digits(n, 10)
-    return ds == reversed(ds)
+    return ds == list(reversed(ds))
 
 
 def bp(n):
     ds = digits(n, 2)
-    return ds == reversed(ds)
+    return ds == list(reversed(ds))
 
 
 s = 0
