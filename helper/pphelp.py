@@ -71,9 +71,11 @@ def istriangle(n):
     return k*(k+1) == n
 
 
-def mexp(m1, n, mod=None):
-    prod = 
-    return mexp(m1
+def mexp(m, n, mod=None):
+    prod = m if n%2 else np.identity(m.shape[0], dtype=np.int64)
+    if n:
+        prod = prod * (mexp(m, n//2, mod) ** 2)
+    return prod%mod if mod else prod
 
 
 def linrec(cl, init, n):
