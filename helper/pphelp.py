@@ -2,6 +2,8 @@ import functools
 import numpy as np
 from math import factorial as fact
 
+np.seterr(all='warn', over='raise')
+
 
 def isprime(n):
     for i in range(2, int(n**0.5)+1):
@@ -72,16 +74,29 @@ def istriangle(n):
 
 
 def mexp(m, n, mod=None):
-    prod = m if n%2 else np.identity(m.shape[0], dtype=np.int64)
+    prod = m if n%2 else np.identity(m.shape[0], dtype=object)
     if n:
         prod = prod * (mexp(m, n//2, mod) ** 2)
     return prod%mod if mod else prod
 
 
-def linrec(cl, init, n):
-    return
+def linrec(cl, init, n, mod=None):
+    terms = np.matrix([1] + init, dtype=object).transpose()
+    k = len(terms)
+
+    m = [[1] + [0]*(k-1)]
+    for i in range(k-2):
+        r = [0]*(i+2) + [1] + [0]*(k-i-3)
+        m.append(r)
+    m.append(cl)
+    m = np.matrix(m, dtype=object)
 
 
-def fib(n):
-    return linrec([1,1,0], [1, 1], n)
+    m = mexp(m, n, mod)
+    term = (m*terms).item(-1)
+    return term%mod if mod else term
+
+
+def fib(n, mod=None):
+    return linrec([0, 1, 1], [1, 1], n, mod)
 
