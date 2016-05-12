@@ -17,5 +17,12 @@ from pphelp import *
 #print(me)
 #print(stop - start)
 
+#for i in range(10):
+#    print(scp_rand(5, i+1))
+#
+#print(scp_rand(1000, 1000))
 
-print(fib(50000000000000000000, 1234567))
+n = 5000000000000
+n = 10
+print(linrec([0, 1, 1], [1, 3], n-1, 1234567))
+

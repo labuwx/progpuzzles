@@ -68,15 +68,14 @@ def isleap(y):
 
 
 def istriangle(n):
-    n = 2 * n
-    k = int(n**0.5)
+    k = int((2*n) ** 0.5)
     return k*(k+1) == n
 
 
 def mexp(m, n, mod=None):
     prod = m if n%2 else np.identity(m.shape[0], dtype=object)
     if n:
-        prod = prod * (mexp(m, n//2, mod) ** 2)
+        prod = prod * mexp(m, n//2, mod) ** 2
     return prod%mod if mod else prod
 
 
@@ -84,19 +83,19 @@ def linrec(cl, init, n, mod=None):
     terms = np.matrix([1] + init, dtype=object).transpose()
     k = len(terms)
 
-    m = [[1] + [0]*(k-1)]
-    for i in range(k-2):
-        r = [0]*(i+2) + [1] + [0]*(k-i-3)
-        m.append(r)
-    m.append(cl)
+    m = [[1] + [0]*(k-1)] + \
+        [[0]*(i+2) + [1] + [0]*(k-i-3) for i in range(k-2)] + \
+        [cl]
     m = np.matrix(m, dtype=object)
 
-
     m = mexp(m, n, mod)
-    term = (m*terms).item(-1)
+    term = (m*terms).item(1)
     return term%mod if mod else term
 
 
 def fib(n, mod=None):
-    return linrec([0, 1, 1], [1, 1], n, mod)
+    return linrec([0, 1, 1], [0, 1], n, mod)
+
+def scp_rand(s, n):
+    return linrec([500003, 31, 103, 7], [s, 1237, 345892], n-1, 1000001)
 
