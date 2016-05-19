@@ -1,7 +1,15 @@
 import functools
+import itertools
+import networkx as nx
 import numpy as np
+import operator
+import pprint
+import statistics
+import sympy as sp
 from math import factorial as fact
+from statistics import median
 
+pprint = pprint.PrettyPrinter(indent=4).pprint
 np.seterr(all='warn', over='raise')
 
 
@@ -12,15 +20,13 @@ def isprime(n):
     return n > 1
 
 
-def forperm(f, l, t=[]):
-    if l == []:
-        f(t)
-    for i in range(len(l)):
-        p = t[:]
-        p.append(l[i])
-        l2 = l[:]
-        del l2[i]
-        forperm(f, l2, p)
+def forperm(f, l, r=None):
+    for p in itertools.permutations(l, r):
+        f(p)
+
+
+def is_anagram(a, b):
+    return Counter(a) == Counter(b)
 
 
 def ispan(n):
@@ -96,6 +102,36 @@ def linrec(cl, init, n, mod=None):
 def fib(n, mod=None):
     return linrec([0, 1, 1], [0, 1], n, mod)
 
-def scp_rand(s, n):
+
+def spc_rand(s, n):
     return linrec([500003, 31, 103, 7], [s, 1237, 345892], n-1, 1000001)
+
+
+def rpn_eval(expr):
+    expr = expr
+    operators = {
+        '+': (operator.add, 2),
+        '-': (operator.sub, 2),
+        '*': (operator.mul, 2),
+        '/': (operator.truediv, 2),
+        '^': (operator.pow, 2),
+        '%': (operator.mod, 2),
+        '_': (lambda x: -x, 1),
+    }
+    stack = []
+    try:
+        for token in expr:
+            if token in operators:
+                if operators[token][1] == 1:
+                    stack.append(operators[token][0](stack.pop()))
+                elif operators[token][1] == 2:
+                    stack.append(operators[token][0](stack.pop(-2), stack.pop()))
+            else:
+                stack.append(token)
+        if len(stack) != 1:
+            raise
+    except:
+        return None
+    else:
+        return stack[0]
 
