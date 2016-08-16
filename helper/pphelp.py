@@ -135,3 +135,34 @@ def rpn_eval(expr):
     else:
         return stack[0]
 
+
+def fastexp(x, n, mod):
+    if n <= 0:
+        return 1
+
+    y = (fastexp(x, n//2, mod) % mod) ** 2
+    if n%2:
+        y *= x
+
+    return y % mod
+
+
+def factors(n):
+    factors = []
+    for p in range(2, n+1):
+        k = 0
+        while n%p == 0:
+            k += 1
+            n //= p
+        if k:
+            factors.append((p, k))
+    return factors
+
+
+def divsum(n):
+    fs = factors(n)
+    pr = 1
+    for d, k in fs:
+        pr *= (d ** (k+1) - 1) // (d -1)
+    return pr - n
+
