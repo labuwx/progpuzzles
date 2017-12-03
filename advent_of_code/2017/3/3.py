@@ -10,17 +10,11 @@ def next_point(p):
 
     if p1 == -p2 == r:
         return p1+1, p2
-    if p1 == p2 == r:
-        return p1-1, p2
-    if -p1 == p2 == r:
-        return p1, p2-1
-    if -p1 == -p2 == r:
-        return p1+1, p2
-    if p1 == r:
+    if p1 == r and p2 < r:
         return p1, p2+1
-    if p2 == r:
+    if p2 == r and -r < p1:
         return p1-1, p2
-    if p1 == -r:
+    if p1 == -r and -r < p2:
         return p1, p2-1
     if p2 == -r:
         return p1+1, p2
