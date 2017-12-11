@@ -15,7 +15,10 @@ smap = {
 def dist(h ,v):
     h, v = abs(h), abs(v)
     diags = min(h, v)
-    ndiags = (max(h, v) - diags) / 2
+    h -= diags
+    v -= diags
+    v /= 2
+    ndiags = h + v
     return diags + ndiags
 
 
