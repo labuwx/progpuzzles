@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
-s1, s2 = ds.split()
-
-dist = sum(1 for a, b in zip(s1, s2) if a != b)
+s1, s2 = get_dataset().split()
+dist = hamm_dist(s1, s2)
 
 print(dist)

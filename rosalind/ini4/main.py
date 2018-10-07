@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read()
+ds = get_dataset()
 a, b = [int(x) for x in ds.split()]
 
 s = sum(n for n in range(a, b+1) if n%2)

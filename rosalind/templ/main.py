@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
+ds = get_dataset()

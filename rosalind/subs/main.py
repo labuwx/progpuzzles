@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
+ds = get_dataset()
 s, p = ds.split()
 
 idx = [i+1 for i in range(len(s)) if s.startswith(p, i)]

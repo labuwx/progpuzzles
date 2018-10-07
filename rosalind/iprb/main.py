@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-def ncr(n):
-    return n*(n-1)//2
-
-
-ds = open(argv[1]).read().strip()
+ds = get_dataset()
 k, m, n = (int(x) for x in ds.split())
 s = k + m + n
 
-p = (ncr(k) + k*m + 3/4 * ncr(m) + k*n + 1/2 * m*n ) / ncr(s)
+p = (nCr(k) + k*m + 3/4 * nCr(m) + k*n + 1/2 * m*n ) / nCr(s)
 
 print(p)

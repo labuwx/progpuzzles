@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import collections
-from sys import argv
+
+from bioinf_common import *
 
 
-ds = open(argv[1]).read()
+ds = get_dataset()
 
 cnt = collections.Counter(ds.split())
 
 for w, n in cnt.items():
     print(w, n)
-
-

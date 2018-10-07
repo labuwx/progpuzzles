@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read()
+ds = get_dataset()
 s, a, b, c, d = ds.split()
 
 a = int(a)

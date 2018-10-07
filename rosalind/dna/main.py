@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 from collections import Counter
-from sys import argv
+
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
-cnt = Counter(ds)
+dna = get_dataset()
+cnt = Counter(dna)
 
 print(cnt['A'], cnt['C'], cnt['G'], cnt['T'])

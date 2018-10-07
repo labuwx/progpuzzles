@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-from collections import Counter
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
-rna = ds.replace('T', 'U')
+dna = get_dataset()
+rna = dna2rna(dna)
 
 print(rna)

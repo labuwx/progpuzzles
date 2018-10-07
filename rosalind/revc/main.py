@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import argv
+from bioinf_common import *
 
 
-ds = open(argv[1]).read().strip()
-bmap = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
-
-revc = ''.join(bmap[b] for b in reversed(ds))
+dna = get_dataset()
+revc = rev_comp(dna)
 
 print(revc)
