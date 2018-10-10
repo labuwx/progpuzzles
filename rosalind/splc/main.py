@@ -11,6 +11,6 @@ introns = chains[1:]
 
 exons = get_exons(dna, introns)
 mrna = dna2rna(exons)
-prots = rna2prots(mrna)
+prot = rna2prot(mrna)
 
-print(prots)
+print(prot)

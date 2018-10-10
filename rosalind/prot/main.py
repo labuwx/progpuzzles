@@ -4,6 +4,6 @@ from bioinf_common import *
 
 
 rna = get_dataset()
-prots = rna2prots(rna)
+prot = rna2prot(rna)
 
-print(prots)
+print(prot)

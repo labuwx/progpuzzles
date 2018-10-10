@@ -10,7 +10,7 @@ m = 1000000
 cnt = Counter(codon_map.values())
 
 res = cnt[None]  # number of stop codons
-for prot in ds:
-    res = (res * cnt[prot]) % m
+for aa in ds:
+    res = (res * cnt[aa]) % m
 
 print(res)

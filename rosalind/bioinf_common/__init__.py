@@ -49,20 +49,20 @@ def get_consensus(profile):
     return consensus
 
 
-def rna2prots(rna, strict_mode=False):
-    prots = ''
+def rna2prot(rna, strict_mode=False):
+    prot = ''
     stopped = not strict_mode
     for i in range(0, len(rna)//3):
         codon = rna[3*i: 3*i+3]
-        prot = codon_map[codon]
-        if prot is None:
+        aa = codon_map[codon]
+        if aa is None:
             if strict_mode:
                 stopped = True
                 break
             else:
                 continue
-        prots += prot
-    return prots if stopped else None
+        prot += aa
+    return prot if stopped else None
 
 
 def get_orf(rna):
@@ -120,6 +120,6 @@ def from_uniprot(ids):
     return prots
 
 
-def nCr(n,r=2):
+def nCr(n, r=2):
     f = math.factorial
     return f(n) // f(r) // f(n-r)
