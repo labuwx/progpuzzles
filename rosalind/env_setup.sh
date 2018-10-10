@@ -1,5 +1,0 @@
-SCRIPT_PATH=$(readlink -f "$0")
-SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
-MODULES_DIR="$SCRIPT_DIR/modules"
-
-export PYTHONPATH="$MODULES_DIR:$PYTHONPATH"
