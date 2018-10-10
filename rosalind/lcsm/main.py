@@ -23,5 +23,3 @@ for j in range(l, -1, -1):
         if found: break
 
 print(subs)
-
-
