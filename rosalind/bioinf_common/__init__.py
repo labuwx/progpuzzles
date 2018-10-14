@@ -3,7 +3,7 @@ import re
 import requests
 import sys
 import itertools as it
-from collections import OrderedDict
+from collections import defaultdict, deque, OrderedDict
 
 from .maps import *
 
@@ -81,6 +81,21 @@ def hamm_dist(s1, s2):
     return sum(1 for a, b in it.zip_longest(s1, s2) if a != b)
 
 
+def trans_type(b1, b2):
+    if b1 == b2:
+        return None
+    elif len({b1, b2} & {'A', 'G'}) % 2 == 0:
+        return 'TI'
+    else:
+        return 'TV'
+
+
+def tt_ratio(dna1, dna2):
+    ts = [trans_type(b1, b2) for b1, b2 in zip(dna1, dna2)]
+    r = ts.count('TI') / ts.count('TV')
+    return r
+
+
 def pmotif_search(pattern, chain=None):
     re_pattern = r'(?=%s)' % pattern.replace('{', '[^').replace('}', ']')
     matcher = re.compile(re_pattern)
@@ -123,3 +138,59 @@ def from_uniprot(ids):
 def nCr(n, r=2):
     f = math.factorial
     return f(n) // f(r) // f(n-r)
+
+
+def topo_sort(nodes, edg):
+    start_node = 'S_T_A_R_T__N_O_D_E'
+    edge = lambda x, y: x == start_node or edg(x, y)
+    seen, branch, left = set(), deque(), deque()
+    q = deque([start_node])
+    while q:
+        v = q.pop()
+        if v in seen: continue
+        seen.add(v)
+        q.extend(x for x in nodes if edge(v, x))
+
+        while branch and v not in (x for x in nodes if edge(branch[-1], x)):
+            left.append(branch.pop())
+        branch.append(v)
+    return list(branch)[1:] + list(left)[::-1]
+
+
+def lcsq(a, b):
+    l, m = len(a), len(b)
+    cache = defaultdict(str)
+    idxs = sorted(it.product(range(l), range(m)), key=sum)
+    for i, j in idxs:
+        ca, cb = a[i], b[j]
+        if ca == cb:
+            val = cache[(i-1, j-1)] + ca
+        else:
+            val = max([
+                cache[(i-1, j)], cache[(i, j-1)]
+            ], key=len)
+        cache[(i, j)] = val
+
+    return cache[l-1, m-1]
+
+
+def edit_distance(a, b):
+    l, m = len(a), len(b)
+    cache = defaultdict(int)
+    idxs = sorted(it.product(range(-1, l), range(-1, m)), key=sum)
+    for i, j in idxs:
+        if i == -1 or j == -1:
+            val = i + j + 2
+        else:
+            ca, cb = a[i], b[j]
+            if ca == cb:
+                val = cache[(i-1, j-1)]
+            else:
+                val = min(
+                    cache[(i-1, j)],
+                    cache[(i, j-1)],
+                    cache[(i-1, j-1)]
+                ) + 1
+        cache[(i, j)] = val
+
+    return cache[l-1, m-1]
