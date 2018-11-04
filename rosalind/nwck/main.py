@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from bioinf_common import *
-from newick import *
 
 
 ds = get_dataset()
@@ -11,6 +10,7 @@ inp = [(g, nodes.split()) for g, nodes in zip(lines[::2], lines[1::2])]
 distances = []
 for nws, (u, v) in inp[:]:
     g = from_newick(nws)
+    # print(g)
     d = nw_distance(g, u, v)
     distances.append(d)
 

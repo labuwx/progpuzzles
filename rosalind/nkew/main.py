@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from bioinf_common import *
-from newick import *
 
 
 ds = get_dataset()

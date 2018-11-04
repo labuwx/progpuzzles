@@ -4,8 +4,10 @@ import requests
 import sys
 import itertools as it
 from collections import defaultdict, deque, OrderedDict
+pprint = __import__('pprint').PrettyPrinter().pprint
 
 from .maps import *
+from .newick import from_newick, nw_distance
 
 
 def get_dataset():
@@ -24,6 +26,10 @@ def rna2dna(rna):
 
 def rev_comp(dna):
     return ''.join(base_pairs[b] for b in reversed(dna))
+
+
+def rev_comp_rna(rna):
+    return ''.join(base_pairs_rna[b] for b in reversed(rna))
 
 
 def gc_cont(xna):
@@ -140,6 +146,46 @@ def nCr(n, r=2):
     return f(n) // f(r) // f(n-r)
 
 
+def dfs(nodes, edges):
+    parent, reached, left, etype = {}, {}, {}, {}
+    rn, ln = it.count(), it.count()
+    for v0 in nodes:
+        if v0 in reached:
+            continue
+
+        q, branch = [(None, v0)], []
+        while q:
+            p, u = q.pop()
+            if u in reached: continue
+            parent[u] = p
+            reached[u] = next(rn)
+
+            while branch and branch[-1] != p:
+                left[branch.pop()] = next(ln)
+            branch.append(u)
+
+            for e in (e for e in edges if e[0] == u):
+                v = e[1]
+                if v not in reached:
+                    q.append((u, v))
+                    etype[e] = 'T'
+                elif v not in left:
+                    etype[e] = 'R'
+                else:
+                    etype[e] = 'F' if reached[u] < reached[v] else 'X'
+
+        while branch:
+            left[branch.pop()] = next(ln)
+
+    return parent, reached, left, etype
+
+
+def topo_sort_dfs(nodes, edges):
+    left = dfs(nodes, edges)[2]
+    topo_order = sorted(left.keys(), key=left.get, reverse=True)
+    return topo_order
+
+
 def topo_sort(nodes, edg):
     start_node = 'S_T_A_R_T__N_O_D_E'
     edge = lambda x, y: x == start_node or edg(x, y)
@@ -174,6 +220,19 @@ def lcsq(a, b):
     return cache[l-1, m-1]
 
 
+def scsq(a, b):
+    subs = lcsq(a, b)
+    supers = ''
+
+    for c in subs:
+        i, j = a.index(c), b.index(c)
+        supers += a[:i] + b[:j] + c
+        a, b = a[i+1:], b[j+1:]
+    supers += a + b
+
+    return supers
+
+
 def edit_distance(a, b):
     l, m = len(a), len(b)
     cache = defaultdict(int)
@@ -194,3 +253,34 @@ def edit_distance(a, b):
         cache[(i, j)] = val
 
     return cache[l-1, m-1]
+
+
+def from_edgelist(txt):
+    lines = [l for l in reversed(txt.split('\n')) if l]
+    ng = int(lines.pop()) if len(lines[-1].split()) == 1 else None
+    graphs = []
+    for _ in range(ng if ng != None else 1):
+        n, m = (int(x) for x in lines.pop().split())
+        edges = [tuple(int(x) for x in lines.pop().split()) for __ in range(m)]
+        nodes = set(range(1, n+1))
+        graphs.append((nodes, edges)) 
+
+    assert(lines == [])
+    return graphs if ng != None else graphs[0]
+
+
+def bellman_ford(nodes, edges, start):
+    edges = sorted(edges, key=lambda e: e[0])
+    dist = defaultdict(lambda: math.inf, {start: 0})
+    parent = {}
+    for _ in range(len(nodes)-1):
+        for u, v, c in edges:
+            if dist[u] + c < dist[v]:
+                parent[v] = u
+                dist[v] = dist[u] + c
+
+    for u, v, c in edges:
+        if dist[u] + c < dist[v]:
+            return None
+
+    return dist
