@@ -1,12 +1,12 @@
-import functools
-import itertools
+import functools as ft
+import itertools as it
 import networkx as nx
 import numpy as np
 import operator
 import pprint
 import statistics
 import sympy as sp
-from math import factorial as fact
+from math import factorial as fact, gcd, floor, sqrt
 from statistics import median
 
 pprint = pprint.PrettyPrinter(indent=4).pprint
@@ -21,7 +21,7 @@ def isprime(n):
 
 
 def forperm(f, l, r=None):
-    for p in itertools.permutations(l, r):
+    for p in it.permutations(l, r):
         f(p)
 
 
@@ -48,8 +48,9 @@ def dsum(n, b):
     return sum(digits(n, b))
 
 
-def tonum(l, b):
-    return reduce(lambda acc, x: b * acc + x, l[::-1], 0)
+def tonum(l, b=10):
+    l = list(l)
+    return ft.reduce(lambda acc, x: b * acc + x, reversed(l), 0)
 
 
 def is_curious(n):
@@ -73,9 +74,31 @@ def isleap(y):
     return not(y%400) or bool(y%100) and not(y%4)
 
 
-def istriangle(n):
-    k = int((2*n) ** 0.5)
-    return k*(k+1) == n
+def triangle_num(n):
+    return n * (n+1) // 2
+
+
+def is_triangle(k):
+    n = round(((1 + 8*k) ** 0.5 - 1) / 2)
+    return k == triangle_num(n)
+
+
+def pentagonal_num(n):
+    return n * (3*n - 1) // 2
+
+
+def is_pentagonal(k):
+    n = round(((24*k + 1) ** (1/2) + 1) / 6)
+    return k == pentagonal_num(n)
+
+
+def hexagonal_num(n):
+    return n * (2*n - 1)
+
+
+def is_hexagonal(k):
+    n = round(((1 + 8*k) ** 0.5 + 1) / 4)
+    return k == hexagonal_num(n)
 
 
 def mexp(m, n, mod=None):
@@ -148,14 +171,19 @@ def fastexp(x, n, mod):
 
 
 def factors(n):
-    factors = []
-    for p in range(2, n+1):
+    p, factors = 2, []
+    sqrt_n = floor(sqrt(n))
+    while p <= sqrt_n:
         k = 0
         while n%p == 0:
             k += 1
             n //= p
         if k:
             factors.append((p, k))
+            sqrt_n = floor(sqrt(n))
+        p += 1
+    if n > 1:
+        factors.append((n, 1))
     return factors
 
 
@@ -166,3 +194,40 @@ def divsum(n):
         pr *= (d ** (k+1) - 1) // (d -1)
     return pr - n
 
+
+def nCr(n, r):
+    return fact(n) / fact(r) / fact(n-r)
+
+
+def is_palindrome(n):
+    ds = digits(n)
+    return list(reversed(ds)) == ds
+
+
+def is_lychrel(n):
+    assert n < 10677
+    for _ in range(50 + 1):
+        n_rev = tonum(reversed(digits(n)))
+        n += n_rev
+        if is_palindrome(n):
+            return False
+    return True
+
+
+def simplify(num, denom):
+    d = gcd(num, denom)
+    return num//d, denom//d
+
+
+def eratosthenes_sieve(n):
+    t = [False, False] + [True] * (n-2)
+    i = 2
+    while True:
+        for j in range(2*i, n, i):
+            t[j] = False
+        try:
+            i = t.index(True, i+1)
+        except ValueError:
+            break
+    # return {k for k, v in enumerate(t) if v}
+    return t
