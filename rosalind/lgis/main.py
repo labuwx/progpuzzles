@@ -47,7 +47,7 @@ ds = get_dataset()
 l = [int(x) for x in ds.split()[1:]]
 
 l_inc_ss = longest_mon_subseq(l, decreasing=False)
-# l_dec_ss = longest_mon_subseq(l, decreasing=True)
+l_dec_ss = longest_mon_subseq(l, decreasing=True)
 
 print(*l_inc_ss)
 print(*l_dec_ss)

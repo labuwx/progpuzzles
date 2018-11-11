@@ -206,23 +206,23 @@ def topo_sort(nodes, edg):
 def lcsq(a, b):
     a, b = list(a), list(b)
     l, m = len(a), len(b)
-    cache = defaultdict(lambda: (0, -1, -1))
-    idxs = it.product(range(l), range(m))
+    cache = [[(0, -1, -1) for _ in range(m+1)] for __ in range(l+1)]
+    idxs = it.product(range(1, l+1), range(1, m+1))
     for i, j in idxs:
-        if a[i] == b[j]:
-            val = (cache[(i-1, j-1)][0] + 1, i-1, j-1)
+        if a[i-1] == b[j-1]:
+            val = (cache[i-1][j-1][0] + 1, i-1, j-1)
         else:
             val = max([
-                (cache[(i-1, j)][0], i-1, j),
-                (cache[(i, j-1)][0], i, j-1)
+                (cache[i-1][j][0], i-1, j),
+                (cache[i][j-1][0], i, j-1)
             ], key=lambda v: v[0])
-        cache[(i, j)] = val
+        cache[i][j] = val
 
     ss = []
-    i, j = l-1, m-1
-    while i > -1 and j > -1:
-        ca, cb = a[i], b[j]
-        l, i, j = cache[(i, j)]
+    i, j = l, m
+    while i > 0 and j > 0:
+        ca, cb = a[i-1], b[j-1]
+        l, i, j = cache[i][j]
         if ca == cb:
             ss.append(ca)
     ss = list(reversed(ss))
