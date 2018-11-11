@@ -8,4 +8,4 @@ s, t = ds.split()
 
 super_seq = scsq(s, t)
 
-print(super_seq)
+print(''.join(super_seq))

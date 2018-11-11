@@ -6,4 +6,4 @@ from bioinf_common import *
 ds = get_dataset()
 dna = from_fasta(ds).values()
 
-print(lcsq(*dna))
+print(''.join(lcsq(*dna)))

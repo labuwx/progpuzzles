@@ -204,31 +204,47 @@ def topo_sort(nodes, edg):
 
 
 def lcsq(a, b):
+    a, b = list(a), list(b)
     l, m = len(a), len(b)
-    cache = defaultdict(str)
-    idxs = sorted(it.product(range(l), range(m)), key=sum)
+    cache = defaultdict(lambda: (0, -1, -1))
+    idxs = it.product(range(l), range(m))
     for i, j in idxs:
-        ca, cb = a[i], b[j]
-        if ca == cb:
-            val = cache[(i-1, j-1)] + ca
+        if a[i] == b[j]:
+            val = (cache[(i-1, j-1)][0] + 1, i-1, j-1)
         else:
             val = max([
-                cache[(i-1, j)], cache[(i, j-1)]
-            ], key=len)
+                (cache[(i-1, j)][0], i-1, j),
+                (cache[(i, j-1)][0], i, j-1)
+            ], key=lambda v: v[0])
         cache[(i, j)] = val
 
-    return cache[l-1, m-1]
+    ss = []
+    i, j = l-1, m-1
+    while i > -1 and j > -1:
+        ca, cb = a[i], b[j]
+        l, i, j = cache[(i, j)]
+        if ca == cb:
+            ss.append(ca)
+    ss = list(reversed(ss))
+
+    return ss
+
+
+def longest_mon_subseq(s, decreasing=False, strict=False):
+    s2 = set(s) if strict else s
+    s2 = sorted(s2, reverse=decreasing)
+    return lcsq(s, s2)
 
 
 def scsq(a, b):
     subs = lcsq(a, b)
-    supers = ''
+    supers = []
 
     for c in subs:
         i, j = a.index(c), b.index(c)
         supers += a[:i] + b[:j] + c
         a, b = a[i+1:], b[j+1:]
-    supers += a + b
+    supers += [a, b]
 
     return supers
 
