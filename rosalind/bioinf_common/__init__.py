@@ -271,6 +271,41 @@ def edit_distance(a, b):
     return cache[l-1, m-1]
 
 
+def alignments(s1, s2, gs=0, sf=None):
+    if sf == None:
+        sf = lambda c1, c2: 1 if c1 == c2 else 0
+
+    n1, n2 = len(s1), len(s2)
+    cache = [[None for _ in range(n2 + 1)] for __ in range(n1 + 1)]
+    cache[0][0] = (0, 1, [])
+    for i in range(1, n1 + 1): cache[i][0] = (gs * i, 1, [(i-1, 0)])
+    for j in range(1, n2 + 1): cache[0][j] = (gs * j, 1, [(0, j-1)])
+    for i, j in it.product(range(1, n1 + 1), range(1, n2 + 1)):
+        l = [
+            (cache[i-1][j][0] + gs, (i-1, j)),
+            (cache[i][j-1][0] + gs, (i, j-1)),
+            (cache[i-1][j-1][0] + sf(s1[i-1], s2[j-1]), (i-1, j-1))
+        ]
+        m = max(r[0] for r in l)
+        lm = [r[1] for r in l if r[0] == m]
+        s = sum(cache[ii][jj][1] for ii, jj in lm)
+        cache[i][j] = (m, s, lm)
+
+    def gen_alignments():
+        q = deque([(('', ''), (n1, n2))])
+        while q:
+            a, (i, j) = q.pop()
+            for ii, jj in cache[i][j][2]:
+                b1 = (s1[ii] if ii < i else '_') + a[0]
+                b2 = (s2[jj] if jj < j else '_') + a[1]
+                q.append(((b1, b2), (ii, jj)))
+            if not cache[i][j][2]:
+                yield a
+
+    return cache[-1][-1][0], cache[-1][-1][1], gen_alignments()
+
+
+
 def from_edgelist(txt):
     lines = [l for l in reversed(txt.split('\n')) if l]
     ng = int(lines.pop()) if len(lines[-1].split()) == 1 else None
