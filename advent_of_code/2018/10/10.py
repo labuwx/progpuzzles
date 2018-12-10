@@ -8,14 +8,16 @@ from matplotlib import pyplot as plt
 
 
 def display(pos):
-    pixels = list(set(pos.values()))
-    X = np.array([p[0] for p in pixels])
-    Y = np.array([-p[1] for p in pixels])
-    plt.scatter(X, Y)
-    plt.show()
+    pos = set(pos)
+    filler = '#'
+    xmin, xmax = min(p[0] for p in pos), max(p[0] for p in pos)
+    ymin, ymax = min(p[1] for p in pos), max(p[1] for p in pos)
+    for y in range(ymin, ymax+1):
+        l = ''.join(filler if (x, y) in pos else ' ' for x in range(xmin, xmax+1))
+        print(l)
 
 
-def move(data, pos, itn):
+def move(data, pos, itn=1):
     for i, (_, v) in enumerate(data):
         pos[i] = (pos[i][0] + v[0] * itn, pos[i][1] + v[1] * itn)
 
@@ -29,10 +31,10 @@ pos = {i: p for i, (p, _) in enumerate(data)}
 for i in it.count():
     Ys = {c[1] for c in pos.values()}
     ymin, ymax = min(Ys), max(Ys)
-    height = ymax - ymin
-    if len(Ys) == height + 1 and height <= 10:
+    height = ymax - ymin + 1
+    if len(Ys) == height and height == 10:
         break
-    move(data, pos, 1)
+    move(data, pos)
 
+display(pos.values())
 print(i)
-display(pos)
