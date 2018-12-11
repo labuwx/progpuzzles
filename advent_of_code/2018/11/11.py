@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import itertools as it
+import numpy as np
 
 
 def cell_score(p, grid_serial):
@@ -15,13 +16,13 @@ def cell_score(p, grid_serial):
 
 def mask_score(INT_T, p, mask_size):
     x, y = p
-    score = INT_T[x+mask_size-1][y+mask_size-1]
+    score = INT_T[x+mask_size-1, y+mask_size-1]
     if x > 0:
-        score -= INT_T[x-1][y+mask_size-1]
+        score -= INT_T[x-1, y+mask_size-1]
     if y > 0:
-        score -= INT_T[x+mask_size-1][y-1]
+        score -= INT_T[x+mask_size-1, y-1]
     if x > 0 and y > 0:
-        score += INT_T[x-1][y-1]
+        score += INT_T[x-1, y-1]
     return score
 
 
@@ -29,21 +30,8 @@ input = int(open('input').read().strip())
 mask_size = 3
 grid_size = 300
 
-T = [
-    [cell_score((x, y), input) for y in range(grid_size)]
-    for x in range(grid_size)
-]
-
-INT_T = [[None] * grid_size for _ in range(grid_size)]
-for x, y in it.product(range(grid_size), repeat=2):
-    s = T[x][y]
-    if x > 0:
-        s += INT_T[x-1][y]
-    if y > 0:
-        s += INT_T[x][y-1]
-    if x > 0 and y > 0:
-        s -= INT_T[x-1][y-1]
-    INT_T[x][y] = s
+T = np.fromfunction(lambda *p: cell_score(p, input), (grid_size,) * 2, dtype=int)
+INT_T = T.cumsum(axis=0).cumsum(axis=1)
 
 cmax = max(it.product(range(grid_size - mask_size), repeat=2), key=lambda p: mask_score(INT_T, p, mask_size))
 s1 = r'%d,%d' % tuple(i+1 for i in cmax)
