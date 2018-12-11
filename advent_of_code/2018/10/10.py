@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
 import itertools as it
-import numpy as np
 import re
-from collections import deque
-from matplotlib import pyplot as plt
 
 
 def display(pos):
@@ -32,7 +29,7 @@ for i in it.count():
     Ys = {c[1] for c in pos.values()}
     ymin, ymax = min(Ys), max(Ys)
     height = ymax - ymin + 1
-    if len(Ys) == height and height == 10:
+    if height == 10:
         break
     move(data, pos)
 
