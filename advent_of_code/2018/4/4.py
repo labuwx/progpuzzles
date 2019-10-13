@@ -7,7 +7,9 @@ from datetime import datetime
 
 
 input = open('input').read().strip().split('\n')
-rx = re.compile(r'^\[(?P<dt>.*?)\] (?:(?P<sleep>falls asleep)|(?P<wake>wakes up)|(?P<change>Guard #(?P<id>\d*) begins shift))$')
+rx = re.compile(
+    r'^\[(?P<dt>.*?)\] (?:(?P<sleep>falls asleep)|(?P<wake>wakes up)|(?P<change>Guard #(?P<id>\d*) begins shift))$'
+)
 
 records = []
 for l in input:

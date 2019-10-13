@@ -6,7 +6,7 @@ ps = [2, 3, 5, 7, 11, 13, 17]
 
 def hasprop(n):
     for k in range(7):
-        sl =int(str(n)[k+1 : k+4])
+        sl = int(str(n)[k + 1 : k + 4])
         if sl % ps[k]:
             return False
 
@@ -14,6 +14,8 @@ def hasprop(n):
 
 
 sum = 0
+
+
 def check(l):
     global sum
     n = int(''.join([str(k) for k in l]))
@@ -38,4 +40,3 @@ l = list(range(0, 10))
 forperm(l, check)
 
 print(sum)
-

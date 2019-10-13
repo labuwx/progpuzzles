@@ -13,11 +13,11 @@ s1 = (imax - imin).sum()
 s2 = 0
 for line in input:
     for a, b in it.combinations(line, 2):
-        if a%b == 0:
-            s2 += a//b
+        if a % b == 0:
+            s2 += a // b
             break
-        if b%a == 0:
-            s2 += b//a
+        if b % a == 0:
+            s2 += b // a
             break
 
 print(s1)

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 
-
 def digits(n, b):
     ds = []
 
     while n:
-        ds.append(n%b)
+        ds.append(n % b)
         n = n // b
 
     if not ds:
@@ -31,4 +30,3 @@ for n in range(1, 1000000):
         s += n
 
 print(s)
-

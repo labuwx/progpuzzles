@@ -6,7 +6,7 @@ from bioinf_common import *
 ds = get_dataset()
 strings = ds.split()
 
-nodes, edges = {'' : 1}, []
+nodes, edges = {'': 1}, []
 k = 1
 for s in strings:
     p = ''

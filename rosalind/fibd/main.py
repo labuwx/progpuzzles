@@ -8,7 +8,7 @@ from bioinf_common import *
 ds = get_dataset()
 n, m = (int(x) for x in ds.split())
 
-pop = deque([0] * (m-1) + [1], m)
+pop = deque([0] * (m - 1) + [1], m)
 
 s = 1
 for i in range(1, n):
@@ -18,4 +18,3 @@ for i in range(1, n):
     s = sum(pop)
 
 print(s)
-

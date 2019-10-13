@@ -7,7 +7,8 @@ input = open('input').read()
 
 graph = {}
 for line in input.split('\n'):
-    if line == '': continue
+    if line == '':
+        continue
     m = re.match(r'^(?P<node>\d+) <->( (?P<child>\d+),?)+$', line)
     node = int(m.group('node'))
     children = set(map(int, m.captures('child')))

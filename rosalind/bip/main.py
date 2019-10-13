@@ -19,13 +19,13 @@ def bipartite(edges):
                 return False
             neighbours = [v for v in neighbours if v not in color.keys()]
             q.extend(neighbours)
-            color.update({v: (c+1)%2 for v in neighbours})
+            color.update({v: (c + 1) % 2 for v in neighbours})
     return True
 
 
 ds = get_dataset()
 graphs = [
-    {(e[t], e[(t+1)%2]) for e in edges for t in range(2)}
+    {(e[t], e[(t + 1) % 2]) for e in edges for t in range(2)}
     for _, edges in from_edgelist(ds)
 ]
 

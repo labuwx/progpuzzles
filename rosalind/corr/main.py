@@ -20,5 +20,5 @@ for c in chains:
         correct.update({c, rc})
 
 for c in incorrect:
-    oc = next(oc for oc in correct if hamm_dist(c, oc)==1)
+    oc = next(oc for oc in correct if hamm_dist(c, oc) == 1)
     print(r'%s->%s' % (c, oc))

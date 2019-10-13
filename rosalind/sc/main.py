@@ -8,7 +8,7 @@ graphs = from_edgelist(ds)
 
 sc = []
 for nodes, edges in graphs:
-    rev_edges = [(v, u) for u,v in edges]
+    rev_edges = [(v, u) for u, v in edges]
     topo_order = topo_sort_dfs(nodes, edges)
     parent, reached = dfs(topo_order, rev_edges)[:2]
     reached = sorted(reached.keys(), key=reached.get)

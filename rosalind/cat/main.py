@@ -12,13 +12,14 @@ def num_perf_matchings(rna):
             return 1
 
         s = 0
-        for k in range(a+1, b+1):
-            if base_pairs_rna[rna[k]] != rna[a]: continue
-            s += nm(a+1, k-1) * nm(k+1, b)
+        for k in range(a + 1, b + 1):
+            if base_pairs_rna[rna[k]] != rna[a]:
+                continue
+            s += nm(a + 1, k - 1) * nm(k + 1, b)
 
         return s
 
-    return nm(0, len(rna)-1)
+    return nm(0, len(rna) - 1)
 
 
 ds = get_dataset()

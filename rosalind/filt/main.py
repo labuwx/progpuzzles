@@ -8,7 +8,9 @@ from bioinf_common import *
 
 with open(sys.argv[1]) as input:
     q, p = (int(x) for x in input.readline().split())
-    records_q = [rec.letter_annotations['phred_quality'] for rec in SeqIO.parse(input, 'fastq')]
+    records_q = [
+        rec.letter_annotations['phred_quality'] for rec in SeqIO.parse(input, 'fastq')
+    ]
 
 n = 0
 for qual in records_q:

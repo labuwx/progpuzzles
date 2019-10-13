@@ -13,7 +13,7 @@ def tbt(s):
 def get_window(T, im, wsize, idx):
     window = tuple(
         T[i - im] if (i - im) in range(len(T)) else False
-        for i in range(idx - wsize//2, idx + wsize//2 + 1)
+        for i in range(idx - wsize // 2, idx + wsize // 2 + 1)
     )
     return window
 
@@ -40,7 +40,7 @@ n1, n2 = 20, 50000000000
 init = tbt(re.match(r'^initial state: (?P<init>[#.]+)$', input[0]).group('init'))
 
 rules = {
-    tbt(m.group('pattern')) : tbt(m.group('res'))[0]
+    tbt(m.group('pattern')): tbt(m.group('res'))[0]
     for m in (rx.match(l) for l in input[2:])
 }
 wsize = len(next(iter(rules.keys())))
@@ -55,9 +55,12 @@ for n in it.count():
         cache[hs] = (n, im)
 
     df = wsize // 2
-    T = deque(rules[get_window(T, im, wsize, i)] for i in range(im - df, im + len(T) + df))
+    T = deque(
+        rules[get_window(T, im, wsize, i)] for i in range(im - df, im + len(T) + df)
+    )
     im -= df
-    while T[-1] == False: T.pop()
+    while T[-1] == False:
+        T.pop()
     while T[0] == False:
         T.popleft()
         im += 1

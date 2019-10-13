@@ -12,9 +12,11 @@ def myint(x):
 
     return res
 
+
 def mval(mem, x):
     assert x != None
     return x if isinstance(x, int) else mem[x]
+
 
 def mpop(stack):
     try:
@@ -28,7 +30,8 @@ input = open('input').read()
 
 instr = []
 for line in input.split('\n'):
-    if line == '': continue
+    if line == '':
+        continue
     m = re.match(r'^(?P<op>\w+) (?P<a1>-?\w+)( (?P<a2>-?\w+))?$', line)
     op, a1, a2 = m.group('op'), m.group('a1'), m.group('a2')
     a1, a2 = myint(a1), myint(a2)
@@ -70,7 +73,8 @@ while not deadlock:
     deadlock = True
     for j in range(n):
         mem = gmem[j]
-        if idx[j] >= len(instr): continue
+        if idx[j] >= len(instr):
+            continue
         op, a1, a2 = instr[idx[j]]
         if op == 'snd':
             if j == 1:
@@ -85,7 +89,7 @@ while not deadlock:
         elif op == 'mod':
             mem[a1] %= mval(mem, a2)
         elif op == 'rcv':
-            x = mpop(stack[(j+1)%n])
+            x = mpop(stack[(j + 1) % n])
             if x == None:
                 continue
             else:

@@ -10,4 +10,3 @@ m = 1_000_000
 n_subs = pow(2, n, m)
 
 print(n_subs)
-

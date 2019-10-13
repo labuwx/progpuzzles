@@ -16,11 +16,10 @@ xmin, xmax = min(p[0] for p in input), max(p[0] for p in input)
 ymin, ymax = min(p[1] for p in input), max(p[1] for p in input)
 
 T, fins, s2 = {}, set(range(len(input))), 0
-for p in it.product(range(xmin, xmax+1), range(ymin, ymax+1)):  # might need to extend the range for the second part
-    ds = {
-        i: dist(p0, p)
-        for i, p0 in enumerate(input)
-    }
+for p in it.product(
+    range(xmin, xmax + 1), range(ymin, ymax + 1)
+):  # might need to extend the range for the second part
+    ds = {i: dist(p0, p) for i, p0 in enumerate(input)}
     s2 += sum(ds.values()) < slim
     min_dist = min(d for d in ds.values())
     dom = {i for i, d in ds.items() if d == min_dist}

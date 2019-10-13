@@ -14,8 +14,8 @@ np.seterr(all='warn', over='raise')
 
 
 def isprime(n):
-    for i in range(2, int(n**0.5)+1):
-        if n%i == 0:
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
             return False
     return n > 1
 
@@ -30,14 +30,13 @@ def is_anagram(a, b):
 
 
 def ispan(n):
-    return len(str(n)) == 9 and  \
-           set(str(n)) == {str(i) for i in range(1, 10)}
+    return len(str(n)) == 9 and set(str(n)) == {str(i) for i in range(1, 10)}
 
 
 def digits(n, b=10):
     ds = []
     while n:
-        ds.append(n%b)
+        ds.append(n % b)
         n = n // b
     if ds == []:
         ds = [0]
@@ -65,61 +64,63 @@ def is_curious(n):
 def denom_rec(d, n=1):
     nl = []
     while n and n not in nl:
-       nl.append(n)
-       n = (n % d) * 10
+        nl.append(n)
+        n = (n % d) * 10
     return len(nl) - nl.index(n) if n else 0
 
 
 def isleap(y):
-    return not(y%400) or bool(y%100) and not(y%4)
+    return not (y % 400) or bool(y % 100) and not (y % 4)
 
 
 def triangle_num(n):
-    return n * (n+1) // 2
+    return n * (n + 1) // 2
 
 
 def is_triangle(k):
-    n = round(((1 + 8*k) ** 0.5 - 1) / 2)
+    n = round(((1 + 8 * k) ** 0.5 - 1) / 2)
     return k == triangle_num(n)
 
 
 def pentagonal_num(n):
-    return n * (3*n - 1) // 2
+    return n * (3 * n - 1) // 2
 
 
 def is_pentagonal(k):
-    n = round(((24*k + 1) ** (1/2) + 1) / 6)
+    n = round(((24 * k + 1) ** (1 / 2) + 1) / 6)
     return k == pentagonal_num(n)
 
 
 def hexagonal_num(n):
-    return n * (2*n - 1)
+    return n * (2 * n - 1)
 
 
 def is_hexagonal(k):
-    n = round(((1 + 8*k) ** 0.5 + 1) / 4)
+    n = round(((1 + 8 * k) ** 0.5 + 1) / 4)
     return k == hexagonal_num(n)
 
 
 def mexp(m, n, mod=None):
-    prod = m if n%2 else np.identity(m.shape[0], dtype=object)
+    prod = m if n % 2 else np.identity(m.shape[0], dtype=object)
     if n:
-        prod = prod * mexp(m, n//2, mod) ** 2
-    return prod%mod if mod else prod
+        prod = prod * mexp(m, n // 2, mod) ** 2
+    return prod % mod if mod else prod
 
 
 def linrec(cl, init, n, mod=None):
     terms = np.matrix([1] + init, dtype=object).transpose()
     k = len(terms)
 
-    m = [[1] + [0]*(k-1)] + \
-        [[0]*(i+2) + [1] + [0]*(k-i-3) for i in range(k-2)] + \
-        [cl]
+    m = (
+        [[1] + [0] * (k - 1)]
+        + [[0] * (i + 2) + [1] + [0] * (k - i - 3) for i in range(k - 2)]
+        + [cl]
+    )
     m = np.matrix(m, dtype=object)
 
     m = mexp(m, n, mod)
-    term = (m*terms).item(1)
-    return term%mod if mod else term
+    term = (m * terms).item(1)
+    return term % mod if mod else term
 
 
 def fib(n, mod=None):
@@ -127,7 +128,7 @@ def fib(n, mod=None):
 
 
 def spc_rand(s, n):
-    return linrec([500003, 31, 103, 7], [s, 1237, 345892], n-1, 1000001)
+    return linrec([500003, 31, 103, 7], [s, 1237, 345892], n - 1, 1000001)
 
 
 def rpn_eval(expr):
@@ -163,8 +164,8 @@ def fastexp(x, n, mod):
     if n <= 0:
         return 1
 
-    y = (fastexp(x, n//2, mod) % mod) ** 2
-    if n%2:
+    y = (fastexp(x, n // 2, mod) % mod) ** 2
+    if n % 2:
         y *= x
 
     return y % mod
@@ -175,7 +176,7 @@ def factors(n):
     sqrt_n = floor(sqrt(n))
     while p <= sqrt_n:
         k = 0
-        while n%p == 0:
+        while n % p == 0:
             k += 1
             n //= p
         if k:
@@ -191,12 +192,12 @@ def divsum(n):
     fs = factors(n)
     pr = 1
     for d, k in fs:
-        pr *= (d ** (k+1) - 1) // (d -1)
+        pr *= (d ** (k + 1) - 1) // (d - 1)
     return pr - n
 
 
 def nCr(n, r):
-    return fact(n) / fact(r) / fact(n-r)
+    return fact(n) / fact(r) / fact(n - r)
 
 
 def is_palindrome(n):
@@ -216,17 +217,17 @@ def is_lychrel(n):
 
 def simplify(num, denom):
     d = gcd(num, denom)
-    return num//d, denom//d
+    return num // d, denom // d
 
 
 def eratosthenes_sieve(n):
-    t = [False, False] + [True] * (n-2)
+    t = [False, False] + [True] * (n - 2)
     i = 2
     while True:
-        for j in range(2*i, n, i):
+        for j in range(2 * i, n, i):
             t[j] = False
         try:
-            i = t.index(True, i+1)
+            i = t.index(True, i + 1)
         except ValueError:
             break
     # return {k for k, v in enumerate(t) if v}

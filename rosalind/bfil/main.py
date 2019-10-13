@@ -17,17 +17,17 @@ for record in records:
     chain = str(record.seq)
     l = len(chain)
     start = next(i for i in range(l) if qual[i] >= q)
-    end = next(i for i in range(l-1, -1, -1) if qual[i] >= q)
-    new_chain = chain[start: end+1]
+    end = next(i for i in range(l - 1, -1, -1) if qual[i] >= q)
+    new_chain = chain[start : end + 1]
     new_record = SeqRecord.SeqRecord(
         Seq.Seq(new_chain),
-        id = record.id,
-        name = record.name,
-        description = record.description,
-        dbxrefs = record.dbxrefs,
-        features = record.features,
-        annotations = record.annotations,
-        letter_annotations = {'phred_quality': qual[start: end+1]}
+        id=record.id,
+        name=record.name,
+        description=record.description,
+        dbxrefs=record.dbxrefs,
+        features=record.features,
+        annotations=record.annotations,
+        letter_annotations={'phred_quality': qual[start : end + 1]},
     )
     new_records.append(new_record)
 

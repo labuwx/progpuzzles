@@ -11,4 +11,4 @@ a = float(ls[2])
 x = math.ceil(n / a)
 y = math.ceil(m / a)
 
-print int(x*y)
+print(int(x * y))

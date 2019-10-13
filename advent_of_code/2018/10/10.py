@@ -9,8 +9,8 @@ def display(pos):
     filler = '#'
     xmin, xmax = min(p[0] for p in pos), max(p[0] for p in pos)
     ymin, ymax = min(p[1] for p in pos), max(p[1] for p in pos)
-    for y in range(ymin, ymax+1):
-        l = ''.join(filler if (x, y) in pos else ' ' for x in range(xmin, xmax+1))
+    for y in range(ymin, ymax + 1):
+        l = ''.join(filler if (x, y) in pos else ' ' for x in range(xmin, xmax + 1))
         print(l)
 
 
@@ -20,8 +20,13 @@ def move(data, pos, itn=1):
 
 
 input = open('input').read().strip().split('\n')
-rx = re.compile(r'^position=<\s*(?P<px>-?\d+),\s*(?P<py>-?\d+)> velocity=<\s*(?P<vx>-?\d+),\s*(?P<vy>-?\d+)>$')
-data = [((int(m.group('px')), int(m.group('py'))), (int(m.group('vx')), int(m.group('vy')))) for m in (rx.match(l) for l in input)]
+rx = re.compile(
+    r'^position=<\s*(?P<px>-?\d+),\s*(?P<py>-?\d+)> velocity=<\s*(?P<vx>-?\d+),\s*(?P<vy>-?\d+)>$'
+)
+data = [
+    ((int(m.group('px')), int(m.group('py'))), (int(m.group('vx')), int(m.group('vy'))))
+    for m in (rx.match(l) for l in input)
+]
 
 pos = {i: p for i, (p, _) in enumerate(data)}
 

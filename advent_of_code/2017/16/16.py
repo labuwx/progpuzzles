@@ -20,7 +20,7 @@ def dance(mem, moves, n=1):
         if m2c in cache:
             cs = cache.index(m2c)
             l = len(cache) - cs
-            mem = cache[(n-cs)%l + cs]
+            mem = cache[(n - cs) % l + cs]
             break
         else:
             cache.append(m2c)

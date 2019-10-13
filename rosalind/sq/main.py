@@ -28,7 +28,7 @@ def sq(edges):
 
 ds = get_dataset()
 graphs = [
-    {(e[t], e[(t+1)%2]) for e in edges for t in range(2)}
+    {(e[t], e[(t + 1) % 2]) for e in edges for t in range(2)}
     for _, edges in from_edgelist(ds)
 ]
 

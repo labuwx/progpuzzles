@@ -23,4 +23,3 @@ com_len = len(''.join(m))
 
 print(score)
 print(com_len)
-

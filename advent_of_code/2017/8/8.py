@@ -11,7 +11,7 @@ s2op = {
     '<': operator.lt,
     '<=': operator.le,
     '>=': operator.ge,
-    '>': operator.gt
+    '>': operator.gt,
 }
 
 
@@ -20,8 +20,12 @@ input = open('input').read()
 mem = defaultdict(int)
 global_max = 0
 for line in input.split('\n'):
-    if line == '': continue
-    m = re.match(r'^(?P<target>\w+) (?P<op>inc|dec) (?P<amount>-?\d+) if (?P<condreg>\w+) (?P<condop>==|!=|<|>|<=|>=) (?P<condvalue>-?\d+)$', line)
+    if line == '':
+        continue
+    m = re.match(
+        r'^(?P<target>\w+) (?P<op>inc|dec) (?P<amount>-?\d+) if (?P<condreg>\w+) (?P<condop>==|!=|<|>|<=|>=) (?P<condvalue>-?\d+)$',
+        line,
+    )
 
     if s2op[m.group('condop')](mem[m.group('condreg')], int(m.group('condvalue'))):
         amount = int(m.group('amount'))
@@ -32,5 +36,3 @@ for line in input.split('\n'):
 
 print(max(mem.values()))
 print(global_max)
-
-

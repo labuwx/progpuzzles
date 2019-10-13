@@ -9,10 +9,11 @@ smap = {
     'ne': (1, 1),
     'se': (1, -1),
     'nw': (-1, 1),
-    'sw': (-1, -1)
+    'sw': (-1, -1),
 }
 
-def dist(h ,v):
+
+def dist(h, v):
     h, v = abs(h), abs(v)
     diags = min(h, v)
     h -= diags
@@ -35,4 +36,3 @@ alls = dist(h, v)
 
 print(alls)
 print(dmax)
-

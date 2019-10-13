@@ -13,7 +13,7 @@ def bfs(edges, start):
         d = dist[u]
         neighbours = {e[1] for e in edges if e[0] == u and e[1] not in dist.keys()}
         q.extend(neighbours)
-        dist.update({v: d+1 for v in neighbours})
+        dist.update({v: d + 1 for v in neighbours})
     return dist
 
 

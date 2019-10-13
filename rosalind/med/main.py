@@ -13,12 +13,12 @@ def quickselect(l, k):
     elif k < n1 + n2:
         return p
     else:
-        return quickselect(l3, k-n1-n2)
+        return quickselect(l3, k - n1 - n2)
 
 
 ds = get_dataset()
 *A, k = (int(x) for x in ds.split()[1:])
 
-x = quickselect(A, k-1)
+x = quickselect(A, k - 1)
 
 print(x)

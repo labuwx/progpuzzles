@@ -21,7 +21,9 @@ def win_score(nump, numm):
 
 
 input = open('input').read().strip()
-m = re.match(r'^(?P<players>\d+) players; last marble is worth (?P<marbles>\d+) points', input)
+m = re.match(
+    r'^(?P<players>\d+) players; last marble is worth (?P<marbles>\d+) points', input
+)
 nump, numm = int(m.group('players')), int(m.group('marbles'))
 
 # nump, numm = 9, 25

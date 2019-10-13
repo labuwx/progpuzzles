@@ -18,7 +18,9 @@ for line in input.strip().split('\n'):
 
     if cs == list(checks):
         sum += idn
-        dec_name = ''.join(' ' if c == '-' else alphabet[(alphabet.index(c) + idn) % 26] for c in name)
+        dec_name = ''.join(
+            ' ' if c == '-' else alphabet[(alphabet.index(c) + idn) % 26] for c in name
+        )
         if 'pole' in dec_name:
             print(idn, dec_name)
 

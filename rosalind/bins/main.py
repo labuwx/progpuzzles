@@ -6,14 +6,14 @@ from bioinf_common import *
 def bin_search(l, x, default=None, start=0, end=None):
     if end == None:
         end = len(l)
-    mid = start + (end-start)//2
+    mid = start + (end - start) // 2
     p = l[mid]
     if start == end:
         return mid if p == x else default
     elif x <= p:
         return bin_search(l, x, default, start, mid)
     else:
-        return bin_search(l, x, default, mid+1, end)
+        return bin_search(l, x, default, mid + 1, end)
 
 
 ds = get_dataset().split('\n')

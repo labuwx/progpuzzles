@@ -2,12 +2,15 @@
 
 
 def isprime(n):
-    for i in range(2,int(n**0.5)+1):
-        if n%i==0:
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
             return False
-    return n>1
+    return n > 1
+
 
 max = 1
+
+
 def check(l):
     global max
     n = int(''.join([str(k) for k in l]))
@@ -29,8 +32,7 @@ def forperm(l, f, t=[]):
 
 
 for i in range(1, 10):
-    l = list(range(1, i+1))
+    l = list(range(1, i + 1))
     forperm(l, check)
 
 print(max)
-

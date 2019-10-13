@@ -9,7 +9,9 @@ def length(step):
     return ord(step) - ord('A') + 1 + 60
 
 
-rx = re.compile(r'^Step (?P<from>\w+) must be finished before step (?P<to>\w+) can begin.$')
+rx = re.compile(
+    r'^Step (?P<from>\w+) must be finished before step (?P<to>\w+) can begin.$'
+)
 input = open('input').read().strip().split('\n')
 input = {(m.group('from'), m.group('to')) for m in (rx.match(l) for l in input)}
 
@@ -38,7 +40,8 @@ for t in it.count():
         break
     for w in range(len(workers)):
         x = workers[w]
-        if x == None: continue
+        if x == None:
+            continue
         step, rem = x
         rem -= 1
         if rem == 0:
@@ -51,7 +54,8 @@ for t in it.count():
 
     for w in range(len(workers)):
         x = workers[w]
-        if workers[w] != None: continue
+        if workers[w] != None:
+            continue
         next_step = min((s for s in steps if dependencies[s] == 0), default=None)
         if next_step == None:
             break

@@ -10,7 +10,7 @@ A = [[int(x) for x in l.split()] for l in ds[1:]]
 
 for l in A:
     iperm = sorted(range(len(l)), key=lambda i: l[i])
-    i, j = 0, len(l)-1
+    i, j = 0, len(l) - 1
     while i < j:
         s = l[iperm[i]] + l[iperm[j]]
         if s == 0:
@@ -24,4 +24,4 @@ for l in A:
         print(-1)
     else:
         i, j = sorted(iperm[m] for m in (i, j))
-        print(i+1, j+1)
+        print(i + 1, j + 1)

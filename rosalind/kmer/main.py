@@ -12,11 +12,8 @@ alphabet = sorted(list(base_pairs.keys()))
 k = 4
 
 freq = defaultdict(int)
-for i in range(len(dna)-k+1):
-    kmer = dna[i:i+k]
+for i in range(len(dna) - k + 1):
+    kmer = dna[i : i + k]
     freq[kmer] += 1
 
-print(*(
-    freq[''.join(kmer)]
-    for kmer in it.product(alphabet, repeat=k)
-))
+print(*(freq[''.join(kmer)] for kmer in it.product(alphabet, repeat=k)))

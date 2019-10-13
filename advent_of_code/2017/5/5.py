@@ -2,7 +2,7 @@
 
 input = open('input').read()
 
-jumps1 = [int(line) for line in input.split('\n') if line!='']
+jumps1 = [int(line) for line in input.split('\n') if line != '']
 jumps2 = jumps1.copy()
 
 c1, idx = 0, 0

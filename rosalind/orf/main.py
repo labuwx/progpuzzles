@@ -17,4 +17,3 @@ for rna in rna_l:
     results.update(prots)
 
 print('\n'.join(results))
-

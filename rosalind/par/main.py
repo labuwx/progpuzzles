@@ -4,9 +4,7 @@ from bioinf_common import *
 
 
 def split(l, p):
-    ll = [x for x in l if x < p] + \
-         [x for x in l if x == p] + \
-         [x for x in l if p < x]
+    ll = [x for x in l if x < p] + [x for x in l if x == p] + [x for x in l if p < x]
     return ll
 
 

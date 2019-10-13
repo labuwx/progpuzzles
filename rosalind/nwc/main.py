@@ -9,8 +9,8 @@ ds = get_dataset()
 graphs = from_edgelist(ds)
 
 # nwc = [
-    # 1 if any(bellman_ford(nodes, edges, start) == None for start in nodes) else -1
-    # for nodes, edges in graphs
+# 1 if any(bellman_ford(nodes, edges, start) == None for start in nodes) else -1
+# for nodes, edges in graphs
 # ]
 
 nwc = []

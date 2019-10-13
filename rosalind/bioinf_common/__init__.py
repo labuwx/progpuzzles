@@ -4,6 +4,7 @@ import requests
 import sys
 import itertools as it
 from collections import defaultdict, deque, OrderedDict
+
 pprint = __import__('pprint').PrettyPrinter().pprint
 
 from .maps import *
@@ -48,18 +49,15 @@ def get_profile(dna_l):
 
 def get_consensus(profile):
     l = len(list(profile.values())[0])
-    consensus = [
-        max(profile.items(), key=lambda x: x[1][i])[0]
-        for i in range(l)
-    ]
+    consensus = [max(profile.items(), key=lambda x: x[1][i])[0] for i in range(l)]
     return consensus
 
 
 def rna2prot(rna, strict_mode=False):
     prot = ''
     stopped = not strict_mode
-    for i in range(0, len(rna)//3):
-        codon = rna[3*i: 3*i+3]
+    for i in range(0, len(rna) // 3):
+        codon = rna[3 * i : 3 * i + 3]
         aa = codon_map[codon]
         if aa is None:
             if strict_mode:
@@ -107,7 +105,7 @@ def pmotif_search(pattern, chain=None):
     matcher = re.compile(re_pattern)
 
     def find_motif(chain):
-        idx = [m.start()+1 for m in matcher.finditer(chain)]
+        idx = [m.start() + 1 for m in matcher.finditer(chain)]
         return idx
 
     if chain is None:
@@ -143,7 +141,7 @@ def from_uniprot(ids):
 
 def nCr(n, r=2):
     f = math.factorial
-    return f(n) // f(r) // f(n-r)
+    return f(n) // f(r) // f(n - r)
 
 
 def dfs(nodes, edges):
@@ -156,7 +154,8 @@ def dfs(nodes, edges):
         q, branch = [(None, v0)], []
         while q:
             p, u = q.pop()
-            if u in reached: continue
+            if u in reached:
+                continue
             parent[u] = p
             reached[u] = next(rn)
 
@@ -193,7 +192,8 @@ def topo_sort(nodes, edg):
     q = deque([start_node])
     while q:
         v = q.pop()
-        if v in seen: continue
+        if v in seen:
+            continue
         seen.add(v)
         q.extend(x for x in nodes if edge(v, x))
 
@@ -206,22 +206,22 @@ def topo_sort(nodes, edg):
 def lcsq(a, b):
     a, b = list(a), list(b)
     l, m = len(a), len(b)
-    cache = [[(0, -1, -1) for _ in range(m+1)] for __ in range(l+1)]
-    idxs = it.product(range(1, l+1), range(1, m+1))
+    cache = [[(0, -1, -1) for _ in range(m + 1)] for __ in range(l + 1)]
+    idxs = it.product(range(1, l + 1), range(1, m + 1))
     for i, j in idxs:
-        if a[i-1] == b[j-1]:
-            val = (cache[i-1][j-1][0] + 1, i-1, j-1)
+        if a[i - 1] == b[j - 1]:
+            val = (cache[i - 1][j - 1][0] + 1, i - 1, j - 1)
         else:
-            val = max([
-                (cache[i-1][j][0], i-1, j),
-                (cache[i][j-1][0], i, j-1)
-            ], key=lambda v: v[0])
+            val = max(
+                [(cache[i - 1][j][0], i - 1, j), (cache[i][j - 1][0], i, j - 1)],
+                key=lambda v: v[0],
+            )
         cache[i][j] = val
 
     ss = []
     i, j = l, m
     while i > 0 and j > 0:
-        ca, cb = a[i-1], b[j-1]
+        ca, cb = a[i - 1], b[j - 1]
         l, i, j = cache[i][j]
         if ca == cb:
             ss.append(ca)
@@ -243,7 +243,7 @@ def scsq(a, b):
     for c in subs:
         i, j = a.index(c), b.index(c)
         supers += a[:i] + b[:j] + c
-        a, b = a[i+1:], b[j+1:]
+        a, b = a[i + 1 :], b[j + 1 :]
     supers += [a, b]
 
     return supers
@@ -259,16 +259,14 @@ def edit_distance(a, b):
         else:
             ca, cb = a[i], b[j]
             if ca == cb:
-                val = cache[(i-1, j-1)]
+                val = cache[(i - 1, j - 1)]
             else:
-                val = min(
-                    cache[(i-1, j)],
-                    cache[(i, j-1)],
-                    cache[(i-1, j-1)]
-                ) + 1
+                val = (
+                    min(cache[(i - 1, j)], cache[(i, j - 1)], cache[(i - 1, j - 1)]) + 1
+                )
         cache[(i, j)] = val
 
-    return cache[l-1, m-1]
+    return cache[l - 1, m - 1]
 
 
 def alignments(s1, s2, gs=0, sf=None):
@@ -278,13 +276,15 @@ def alignments(s1, s2, gs=0, sf=None):
     n1, n2 = len(s1), len(s2)
     cache = [[None for _ in range(n2 + 1)] for __ in range(n1 + 1)]
     cache[0][0] = (0, 1, [])
-    for i in range(1, n1 + 1): cache[i][0] = (gs * i, 1, [(i-1, 0)])
-    for j in range(1, n2 + 1): cache[0][j] = (gs * j, 1, [(0, j-1)])
+    for i in range(1, n1 + 1):
+        cache[i][0] = (gs * i, 1, [(i - 1, 0)])
+    for j in range(1, n2 + 1):
+        cache[0][j] = (gs * j, 1, [(0, j - 1)])
     for i, j in it.product(range(1, n1 + 1), range(1, n2 + 1)):
         l = [
-            (cache[i-1][j][0] + gs, (i-1, j)),
-            (cache[i][j-1][0] + gs, (i, j-1)),
-            (cache[i-1][j-1][0] + sf(s1[i-1], s2[j-1]), (i-1, j-1))
+            (cache[i - 1][j][0] + gs, (i - 1, j)),
+            (cache[i][j - 1][0] + gs, (i, j - 1)),
+            (cache[i - 1][j - 1][0] + sf(s1[i - 1], s2[j - 1]), (i - 1, j - 1)),
         ]
         m = max(r[0] for r in l)
         lm = [r[1] for r in l if r[0] == m]
@@ -305,7 +305,6 @@ def alignments(s1, s2, gs=0, sf=None):
     return cache[-1][-1][0], cache[-1][-1][1], gen_alignments()
 
 
-
 def from_edgelist(txt):
     lines = [l for l in reversed(txt.split('\n')) if l]
     ng = int(lines.pop()) if len(lines[-1].split()) == 1 else None
@@ -313,10 +312,10 @@ def from_edgelist(txt):
     for _ in range(ng if ng != None else 1):
         n, m = (int(x) for x in lines.pop().split())
         edges = [tuple(int(x) for x in lines.pop().split()) for __ in range(m)]
-        nodes = set(range(1, n+1))
-        graphs.append((nodes, edges)) 
+        nodes = set(range(1, n + 1))
+        graphs.append((nodes, edges))
 
-    assert(lines == [])
+    assert lines == []
     return graphs if ng != None else graphs[0]
 
 
@@ -324,7 +323,7 @@ def bellman_ford(nodes, edges, start):
     edges = sorted(edges, key=lambda e: e[0])
     dist = defaultdict(lambda: math.inf, {start: 0})
     parent = {}
-    for _ in range(len(nodes)-1):
+    for _ in range(len(nodes) - 1):
         for u, v, c in edges:
             if dist[u] + c < dist[v]:
                 parent[v] = u

@@ -12,7 +12,7 @@ def best_motif(chains):
     for idx in idxs:
         b = [c[i] for i, c in zip(idx, chains)]
         bs = set(b)
-        p_idx = tuple(i-1 for i in idx)
+        p_idx = tuple(i - 1 for i in idx)
         pp, ps = cache[p_idx]
         np = b[0] if len(bs) == 1 else r'[%s]' % ''.join(bs)
         ns = len(b) - len(bs)

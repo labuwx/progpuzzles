@@ -11,7 +11,7 @@ def majority(l, default=None):
             m = x
         k += 1 if x == m else -1
 
-    if l.count(m) <= len(l)//2:
+    if l.count(m) <= len(l) // 2:
         m = default
 
     return m
@@ -19,6 +19,6 @@ def majority(l, default=None):
 
 ds = get_dataset().split('\n')
 L = [[int(x) for x in l.split()] for l in ds[1:]]
-maj =[majority(l, default=-1) for l in L]
+maj = [majority(l, default=-1) for l in L]
 
 print(*maj)

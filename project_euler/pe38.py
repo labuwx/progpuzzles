@@ -2,14 +2,23 @@
 
 
 def ispan(n):
-    return len(str(n)) == 9 and  \
-           set(str(n)) == {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+    return len(str(n)) == 9 and set(str(n)) == {
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+    }
 
 
 def mul(k, l):
     res = ""
     for d in l:
-        res += str(k*d)
+        res += str(k * d)
     return int(res)
 
 
@@ -23,4 +32,3 @@ for i in range(2, 10):
             max = p
 
 print(max)
-

@@ -11,14 +11,15 @@ def num_matchings(rna):
         if b < a:
             return 1
 
-        s = nm(a+1, b)
-        for k in range(a+1, b+1):
-            if base_pairs_rna[rna[k]] != rna[a]: continue
-            s += nm(a+1, k-1) * nm(k+1, b)
+        s = nm(a + 1, b)
+        for k in range(a + 1, b + 1):
+            if base_pairs_rna[rna[k]] != rna[a]:
+                continue
+            s += nm(a + 1, k - 1) * nm(k + 1, b)
 
         return s
 
-    return nm(0, len(rna)-1)
+    return nm(0, len(rna) - 1)
 
 
 ds = get_dataset()

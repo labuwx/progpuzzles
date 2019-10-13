@@ -2,19 +2,22 @@
 
 import itertools as it
 
+
 def gen_amt(b, m):
     amt = {}
     for x, y in it.product(range(m), repeat=2):
-        ds = [d for d in range(b) if (x*b+d) % m == y]
+        ds = [d for d in range(b) if (x * b + d) % m == y]
         if ds:
-            amt[(x, y)] = '|'.join(str(d) for d in ds)  
+            amt[(x, y)] = '|'.join(str(d) for d in ds)
     return amt
+
 
 def rem_st(amt, st):
     ss = {s[i] for s in amt.keys() for i in range(2)}
     namt = {}
     for (x, y) in it.product(ss, repeat=2):
-        if st in (x, y): continue
+        if st in (x, y):
+            continue
         t0 = amt.get((x, y), None)
         t1 = amt.get((x, st), None)
         t2 = amt.get((st, st), None)
@@ -50,5 +53,6 @@ def regex_divisible_by(m):
         amt = rem_st(amt, k)
     rx = r'^(?:' + amt[(0, 0)] + r')+$'
     return rx
+
 
 print(regex_divisible_by(3))

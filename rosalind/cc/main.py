@@ -7,7 +7,7 @@ from bioinf_common import *
 
 def num_comp(n, edges):
     visited, nc = set(), 0
-    for k in range(1, n+1):
+    for k in range(1, n + 1):
         if k in visited:
             continue
 

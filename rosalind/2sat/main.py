@@ -13,8 +13,11 @@ for vars, edges in graphs:
     # sc.append(1 if is_sc else -1)
 
     nodes = [u * x for u, x in it.product(vars, [-1, 1])]
-    edges = [((-1)*u, v) for u, v in ((e[t], e[(t+1)%2]) for e, t in it.product(edges, range(2)))]
-    rev_edges = [(v, u) for u,v in edges]
+    edges = [
+        ((-1) * u, v)
+        for u, v in ((e[t], e[(t + 1) % 2]) for e, t in it.product(edges, range(2)))
+    ]
+    rev_edges = [(v, u) for u, v in edges]
     topo_order = topo_sort_dfs(nodes, edges)
     parent, reached = dfs(topo_order, rev_edges)[:2]
     reached = sorted(reached.keys(), key=reached.get)
@@ -38,4 +41,3 @@ for vars, edges in graphs:
                 if v not in vals:
                     vals[v] = x
         print(1, *sorted(vals.values(), key=abs))
-

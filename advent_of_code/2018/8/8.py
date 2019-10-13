@@ -4,6 +4,7 @@
 def parse_tree(l_ext):
     l = list(reversed(l_ext))
     tree, idc = {}, 0
+
     def parse_tree_inner(parent):
         nonlocal idc
         id = idc
@@ -12,12 +13,9 @@ def parse_tree(l_ext):
         num_attr = l.pop()
         children = [parse_tree_inner(id) for _ in range(num_child)]
         attributes = [l.pop() for _ in range(num_attr)]
-        tree[id] = {
-            'parent': parent,
-            'attributes': attributes,
-            'children': children
-        }
+        tree[id] = {'parent': parent, 'attributes': attributes, 'children': children}
         return id
+
     parse_tree_inner(None)
     return tree
 
@@ -30,7 +28,7 @@ def checksum2(tree, node_id):
         if len(chldrn) == 0:
             cs += attr
         elif attr - 1 in range(len(chldrn)):
-            cs += checksum2(tree, chldrn[attr-1])
+            cs += checksum2(tree, chldrn[attr - 1])
     return cs
 
 

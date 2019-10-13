@@ -3,24 +3,14 @@
 from collections import defaultdict
 
 
-dirmap = {
-    '<': (-1, 0),
-    '>': (1, 0),
-    '^': (0, -1),
-    'v': (0, 1)
-}
+dirmap = {'<': (-1, 0), '>': (1, 0), '^': (0, -1), 'v': (0, 1)}
 
 
-dimap_verb = {
-    'D': (0, 1),
-    'U': (0, -1),
-    'L': (-1, 0),
-    'R': (1, 0)
-}
+dimap_verb = {'D': (0, 1), 'U': (0, -1), 'L': (-1, 0), 'R': (1, 0)}
 
 
 def add(xs, ys):
-    s = tuple(x+y for x, y in zip(xs, ys))
+    s = tuple(x + y for x, y in zip(xs, ys))
     return s
 
 
@@ -61,7 +51,8 @@ input = open('input').read()
 map = {}
 y = 0
 for line in input.split('\n'):
-    if line == '': continue
+    if line == '':
+        continue
     x = 0
     for c in line:
         if c != ' ':
@@ -71,7 +62,8 @@ for line in input.split('\n'):
 
 carts = []
 for p, d in list(map.items()):
-    if d not in dirmap.keys(): continue
+    if d not in dirmap.keys():
+        continue
     carts.append((p, dirmap[d], 0))
     map[p] = '-' if d in '<>' else '|'
 
@@ -80,7 +72,8 @@ cartmap = defaultdict(lambda: None, {p: c for c, (p, _, _) in enumerate(carts)})
 while len(crashed) != len(carts) - 1:
     order = sorted(range(len(carts)), key=lambda c: (carts[c][0][1], carts[c][0][0]))
     for c in order:
-        if c in crashed: continue
+        if c in crashed:
+            continue
         pp, d, t = carts[c]
         p = add(pp, d)
         cartmap[pp] = None

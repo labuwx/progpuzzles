@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 def fill(t, id, x, y, w, h):
-    for i, j in it.product(range(x, x+w), range(y, y+h)):
+    for i, j in it.product(range(x, x + w), range(y, y + h)):
         t[(i, j)].add(id)
 
 

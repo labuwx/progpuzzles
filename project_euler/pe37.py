@@ -2,8 +2,8 @@
 
 
 def isprime(n):
-    for i in range(2,int(n**0.5)+1):
-        if n%i==0:
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
             return False
 
     return n > 1
@@ -18,7 +18,7 @@ def lp(n):
 
 def rp(n):
     if n:
-        return isprime(n) and rp(n//10)
+        return isprime(n) and rp(n // 10)
     else:
         return True
 
@@ -30,4 +30,3 @@ for n in range(10, 1000000):
         k += 1
         s += n
         print(str(k) + ': ' + str(n) + ' - ' + str(s))
-

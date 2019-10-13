@@ -12,16 +12,18 @@ for line in input.split():
         if line[i] in '[]':
             brackets = not brackets
             continue
-        if set(line[i:i+3]) & set('[]'): continue
-        if (not brackets) and line[i] == line[i+2] != line[i+1]:
-            aba.add(line[i+1] + line[i] + line[i+1])
-        if brackets and line[i] == line[i+2] != line[i+1]:
-            bab.add(line[i:i+3])
-        if i < len(line) - 3 and line[i+3] not in '[]':
-            abba = (line[i:i+2] == line[i+3:i+1:-1]) and (line[i] != line[i+1])
+        if set(line[i : i + 3]) & set('[]'):
+            continue
+        if (not brackets) and line[i] == line[i + 2] != line[i + 1]:
+            aba.add(line[i + 1] + line[i] + line[i + 1])
+        if brackets and line[i] == line[i + 2] != line[i + 1]:
+            bab.add(line[i : i + 3])
+        if i < len(line) - 3 and line[i + 3] not in '[]':
+            abba = (line[i : i + 2] == line[i + 3 : i + 1 : -1]) and (
+                line[i] != line[i + 1]
+            )
             aib |= abba and brackets
             gabba |= abba
-
 
     if gabba and not aib:
         cnt += 1

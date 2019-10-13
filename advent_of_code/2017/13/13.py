@@ -8,7 +8,7 @@ def simul(fw, delay=0):
     sev = 0
     caought = False
     for d, r in fw.items():
-        if (d+delay) % (2*r-2) == 0:
+        if (d + delay) % (2 * r - 2) == 0:
             caought = True
             sev += d * r
     return sev, caought
@@ -18,7 +18,8 @@ input = open('input').read()
 
 fw = {}
 for line in input.split('\n'):
-    if line == '': continue
+    if line == '':
+        continue
     m = re.match(r'^(?P<depth>\d+): (?P<range>\d+)$', line)
     d = int(m.group('depth'))
     r = int(m.group('range'))

@@ -16,4 +16,3 @@ edges = [
 
 for edge in edges:
     print(*edge)
-

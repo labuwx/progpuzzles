@@ -11,4 +11,4 @@ consensus = get_consensus(profile)
 
 print(''.join(consensus))
 for b, l in profile.items():
-    print(b+':', *l)
+    print(b + ':', *l)

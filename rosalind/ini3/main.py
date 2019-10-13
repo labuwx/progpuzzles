@@ -11,6 +11,6 @@ b = int(b)
 c = int(c)
 d = int(d)
 
-ss = s[a:b+1] + ' ' + s[c:d+1]
+ss = s[a : b + 1] + ' ' + s[c : d + 1]
 
 print(ss)

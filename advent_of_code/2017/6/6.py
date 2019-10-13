@@ -6,7 +6,9 @@ def next_cfg(mem):
     v = max(mem)
     i = mem.index(v)
 
-    mem_new  = tuple((v + (i-j)%l) // l + (0 if i==j else m) for j, m in enumerate(mem))
+    mem_new = tuple(
+        (v + (i - j) % l) // l + (0 if i == j else m) for j, m in enumerate(mem)
+    )
 
     return mem_new
 
@@ -24,4 +26,3 @@ while True:
 
 print(len(cfgs))
 print(len(cfgs) - cfgs.index(mem))
-

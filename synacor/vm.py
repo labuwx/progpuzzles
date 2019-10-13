@@ -6,13 +6,14 @@ from collections import deque
 e_8 = 2 ** 8
 e_15 = 2 ** 15
 
-#program = [9, 32768, 32769, 4, 19, 32768]
+# program = [9, 32768, 32769, 4, 19, 32768]
 
 program = []
 with open('challenge.bin', 'rb') as f:
     while True:
         word = f.read(2)
-        if len(word) == 0: break
+        if len(word) == 0:
+            break
         word = word[1] * e_8 + word[0]
         program.append(word)
 
@@ -23,12 +24,14 @@ def gnum():
     ip += 1
     return v
 
+
 def gval():
     v = gnum()
     if v < e_15:
         return v
     else:
         return regs[v - e_15]
+
 
 def greg():
     return gnum() - e_15
@@ -37,12 +40,16 @@ def greg():
 ### stack ###
 stack = deque()
 
+
 def push(x):
     stack.append(x)
+
 
 def pop():
     x = stack.pop()
     return x
+
+
 #############
 
 regs = [0] * 8
@@ -51,6 +58,8 @@ for p, x in enumerate(program):
     memory[p] = x
 
 inp_buf = deque()
+
+
 def inp():
     if len(inp_buf) == 0:
         inp_str = input() + '\n'
@@ -148,7 +157,7 @@ while ip < len(memory):
         ip = v
     elif op == 19:  # out
         a = gval()
-        #print(a)
+        # print(a)
         print(chr(a), end='')
     elif op == 20:  # in
         a = greg()

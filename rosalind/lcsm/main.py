@@ -16,10 +16,12 @@ dna_l.remove(dna_m)
 
 found = False
 for j in range(l, -1, -1):
-    if found: break
-    for i in range(0, l-j+1):
-        subs = dna_m[i:i+j]
+    if found:
+        break
+    for i in range(0, l - j + 1):
+        subs = dna_m[i : i + j]
         found = all((subs in dna) for dna in dna_l)
-        if found: break
+        if found:
+            break
 
 print(subs)

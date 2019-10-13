@@ -12,9 +12,9 @@ words = json.loads(fc)
 
 def istr(w):
     val = sum([ord(c) - 96 for c in w.lower()])
-    val = 2*val
+    val = 2 * val
     for k in range(1, val):
-        if k * (k+1) == val:
+        if k * (k + 1) == val:
             return True
     return False
 
@@ -25,4 +25,3 @@ for w in words:
         count += 1
 
 print(count)
-
