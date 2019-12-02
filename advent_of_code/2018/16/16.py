@@ -33,38 +33,20 @@ OPS = {
 }
 
 
-def revmap(map):
-    new_keys = set()
-    for v in map.values():
-        new_keys |= v
-    rmap = {k: set() for k in new_keys}
-    for k, v in map.items():
-        for nk in v:
-            rmap[nk].add(k)
-    return rmap
-
-
 def find_bijection(map):
     map = deepcopy(map)
     change = True
-    for i in it.count():
-        rmap = revmap(map)
-        singles = {k: next(iter(v)) for k, v in rmap.items() if len(v) == 1}
+    while change:
         change = False
-        for k, v in singles.items():
-            change |= len(map[v]) > 1
-            map[v] = {k}
-        # for k, v in map.items():
-            # if len(v) != 1: continue
-            # v = next(iter(v))
-            # for k2, v2 in map.items():
-                # if k2 != k and v in v2:
-                    # change = True
-                    # v2.remove(v)
-        map = revmap(map)
-        if not change: break
-    return map if i % 2 else revmap(map)
-    # return map
+        for k, v in map.items():
+            if len(v) != 1: continue
+            v = next(iter(v))
+            for k2, v2 in map.items():
+                if k2 != k and v in v2:
+                    change = True
+                    v2.remove(v)
+    map = {k: next(iter(v)) for k, v in map.items()}
+    return map
 
 
 rex = r'''Before: \s+\[(?P<b0>\d+), \s(?P<b1>\d+), \s(?P<b2>\d+), \s(?P<b3>\d+)\]\n
@@ -72,6 +54,7 @@ rex = r'''Before: \s+\[(?P<b0>\d+), \s(?P<b1>\d+), \s(?P<b2>\d+), \s(?P<b3>\d+)\
 After: \s+\[(?P<a0>\d+), \s(?P<a1>\d+), \s(?P<a2>\d+), \s(?P<a3>\d+)\]'''
 
 input1, input2 = open('input').read().split('\n\n\n')
+input2 = [tuple(int(x) for x in l.split()) for l in input2.strip().split('\n')]
 
 omap = {i: set(OPS.keys()) for i in range(len(OPS))}
 
@@ -90,15 +73,13 @@ for sample in re.finditer(rex, input1, flags=re.VERBOSE):
     omap[opc] &= passed
     s1 += len(passed) >= 3
 
-print(s1)
-# pprint(omap)
 omap = find_bijection(omap)
-pprint(omap)
 
-input2 = [tuple(int(x) for x in l.split()) for l in input2.strip().split('\n')]
 r = [0] * 4
 for opc, a, b, c in input2:
-    f = OPS[next(iter(omap[opc]))]
+    f = OPS[omap[opc]]
     r = f(r, a, b, c)
 s2 = r[0]
+
+print(s1)
 print(s2)
