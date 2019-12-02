@@ -1,0 +1,56 @@
+SELECT * FROM crime_scene_report
+WHERE date = 20180115 and city = 'SQL City' and type = 'murder'
+-
+Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". The second witness, named Annabel, lives somewhere on "Franklin Ave".
+
+person:
+id	name	license_id	address_number	address_street_name	ssn
+14887	Morty Schapiro	118009	4919	Northwestern Dr	111564949
+16371	Annabel Miller	490173	103	Franklin Ave	318771143
+
+
+I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". Only gold members have those bags. The man got into a car with a plate that included "H42W".
+
+I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th.
+
+SELECT * FROM get_fit_now_member JOIN person JOIN drivers_license
+ON get_fit_now_member.person_id = person.id AND
+   person.license_id = drivers_license.id
+WHERE
+  get_fit_now_member.membership_status = 'gold' AND
+  get_fit_now_member.id LIKE '48Z%'
+
+
+67318	I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017. 
+
+
+SELECT person.id FROM person JOIN drivers_license
+ON person.license_id = drivers_license.id
+WHERE
+  car_make = 'Tesla' AND
+  car_model = 'Model S' AND
+  height BETWEEN 65 AND 67 AND
+  hair_color = 'red' AND
+  gender = 'female'
+
+SELECT person_id as pid2, count(*) as cnt FROM facebook_event_checkin
+WHERE
+  date BETWEEN 20171201 AND 20171231 AND
+  event_name = 'SQL Symphony Concert'
+group by person_id
+
+
+SELECT * FROM (SELECT person.id as pid1, person.name FROM person JOIN drivers_license
+ON person.license_id = drivers_license.id
+WHERE
+  car_make = 'Tesla' AND
+  car_model = 'Model S' AND
+  height BETWEEN 65 AND 67 AND
+  hair_color = 'red' AND
+  gender = 'female') JOIN (SELECT person_id as pid2, count(*) as cnt FROM facebook_event_checkin
+WHERE
+  date BETWEEN 20171201 AND 20171231 AND
+  event_name = 'SQL Symphony Concert'
+group by person_id)
+ON pid1 = pid2
+where cnt = 3
