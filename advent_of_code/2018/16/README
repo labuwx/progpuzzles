@@ -1,0 +1,4 @@
+The find_bijection algorithm works:
+ - a bipartite graph with a unique matching must have a vertex with degree 1 on each side
+ - otherwise there would be an alternating cycle <-/-> unique matching
+ - having a unique matching is an invariant => having a degree 1 vertex is an invariant as well

@@ -39,7 +39,8 @@ def find_bijection(map):
     while change:
         change = False
         for k, v in map.items():
-            if len(v) != 1: continue
+            if len(v) != 1:
+                continue
             v = next(iter(v))
             for k2, v2 in map.items():
                 if k2 != k and v in v2:
