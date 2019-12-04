@@ -18,15 +18,17 @@ def run(mem):
         else:
             raise 'Wrong opc'
 
-        ia, ib, ic = mem[pos+1], mem[pos+2], mem[pos+3]
+        ia, ib, ic = mem[pos + 1], mem[pos + 2], mem[pos + 3]
         mem[ic] = op(mem[ia], mem[ib])
         pos += 4
     return mem
+
 
 def eval(mem, noun, verb):
     mem = list(mem)
     mem[1], mem[2] = noun, verb
     return run(mem)[0]
+
 
 def search(res, mem):
     for noun, verb in product(count(0), count(0)):
@@ -34,12 +36,16 @@ def search(res, mem):
             return (noun, verb)
 
 
-input = open('input').read()
-input = [int(x) for x in input.split(',')]
+def main():
+    input = open('input').read()
+    input = [int(x) for x in input.split(',')]
 
-s1 = eval(input, 12, 2)
-s2 = search(19690720, input)
-s2 = 100 * s2[0] + s2[1]
+    s1 = eval(input, 12, 2)
+    s2 = search(19690720, input)
+    s2 = 100 * s2[0] + s2[1]
 
-print(s1)
-print(s2)
+    print(s1)
+    print(s2)
+
+
+main()
