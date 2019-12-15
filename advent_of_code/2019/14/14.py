@@ -33,11 +33,10 @@ def ore_req(data, qfuel):
     for rchem in react_order:
         if rchem not in fumehood or rchem == 'ORE':
             continue
-        qneeded = fumehood[rchem]
+        qneeded = fumehood.pop(rchem)
         nreact = math.ceil(qneeded / data[rchem][0])
         for ichem, iq in data[rchem][1].items():
             fumehood[ichem] = nreact * iq + fumehood.get(ichem, 0)
-        del fumehood[rchem]
     assert len(fumehood) == 1
     return fumehood['ORE']
 
