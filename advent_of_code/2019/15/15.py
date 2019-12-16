@@ -2,6 +2,8 @@
 
 import operator
 from collections import defaultdict, deque
+import asyncio
+from asyncio import Queue
 
 
 def add(a, b):
@@ -12,7 +14,15 @@ def abs_addr(base, addr, flag):
     return addr + (0 if flag == 0 else base)
 
 
-def run(mem, inp_cb, out_cb):
+def inv(a):
+    return tuple(-ai for ai in a)
+
+
+def getdir(ffrom, tto):
+    return tuple(ti - fi for fi, ti in zip(ffrom, tto))
+
+
+async def run(mem, inp_cb, out_cb):
     mem = defaultdict(int, enumerate(mem))
     pos, base = 0, 0
     while True:
@@ -57,7 +67,10 @@ def run(mem, inp_cb, out_cb):
             f, pm = pm % 10, pm // 10
             inp.append(v if f == 1 else mem[abs_addr(base, v, f)])
 
-        ret = op(*inp)
+        if asyncio.iscoroutinefunction(op):
+            ret = await op(*inp)
+        else:
+            ret = op(*inp)
 
         if ol == 1:
             f, pm = pm % 10, pm // 10
@@ -71,7 +84,7 @@ def run(mem, inp_cb, out_cb):
             base += ret
 
         if ol == 3:
-            out_cb(ret)
+            await out_cb(ret)
 
 
 pixmap = {0: '\u2588', 1: '.', 2: 'X', None: ' '}
@@ -83,14 +96,14 @@ def draw(map):
     ymin, ymax = min(p[1] for p in map.keys()), max(p[1] for p in map.keys())
     for y in range(ymin, ymax + 1):
         l = ''.join(
-            pixmap[map.get((x, y), [None])[0]] if (x, y) != (0, 0) else 'O'
+            pixmap[map.get((x, y), None)] if (x, y) != (0, 0) else 'O'
             for x in range(xmin, xmax + 1)
         )
         print(l)
 
 
 def bfs(map, start):
-    freepos = {pos for pos, (t, _) in map.items() if t != 0}
+    freepos = {pos for pos, t in map.items() if t != 0}
     res = {}
     q = deque([(start, 0)])
     while q:
@@ -103,53 +116,51 @@ def bfs(map, start):
     return res
 
 
-class ExplorationDone(Exception):
-    pass
+async def explore(mem, nodraw=True):
+    inp_que, out_que = Queue(), Queue()
+    robot = asyncio.Task(run(mem, inp_que.get, out_que.put))
 
+    async def move(dir):
+        await inp_que.put(dirmap[dir])
+        res = await out_que.get()
+        return res
 
-def test_move(mem, directions):
-    if len(directions) == 0:
-        return 1
+    async def dfs():
+        map = {(0, 0): 1}
+        q, branch = [((0, 0), dir) for dir in dirmap], [((0, 0), None)]
+        while q:
+            p, u = q.pop()
+            if u in map:
+                continue
 
-    inp_que, out_que = deque(dirmap[dir] for dir in directions), []
+            while branch[-1][0] != p:
+                await move(inv(branch.pop()[1]))
 
-    def out_cb(x):
-        out_que.append(x)
-        if len(out_que) == len(directions):
-            raise ExplorationDone
+            dir = getdir(p, u)
+            type = await move(dir)
+            map[u] = type
 
-    try:
-        run(mem, inp_que.popleft, out_cb)
-    except ExplorationDone:
-        pass
+            if type == 0:
+                continue
 
-    assert 0 not in out_que[:-1]
-    return out_que[-1]
+            branch.append((u, dir))
 
+            nbrs = (add(u, dir) for dir in dirmap)
+            q.extend((u, v) for v in nbrs if v not in map)
+        return map
 
-def explore(mem, nodraw=True):
-    map = {}
-    q = deque([((0, 0), [])])
-    while q:
-        cpos, cpath = q.popleft()
-        if cpos in map:
-            continue
-        type = test_move(mem, cpath)
-        map[cpos] = (type, cpath)
-        if type == 0:
-            continue
-        else:
-            nbrs = [(add(cpos, dir), cpath + [dir]) for dir in dirmap]
-            q.extend(nbrs)
+    dfs_task = asyncio.Task(dfs())
 
-    return map
+    await asyncio.wait([dfs_task, robot], return_when=asyncio.FIRST_COMPLETED)
+    return dfs_task.result()
 
 
 def main():
     mem = [int(x) for x in open('input').read().strip().split(',')]
 
-    map = explore(mem)
-    pos_oxy, s1 = next((pos, len(p)) for pos, (t, p) in map.items() if t == 2)
+    map = asyncio.run(explore(mem))
+    pos_oxy = next(pos for pos, t in map.items() if t == 2)
+    s1 = bfs(map, (0, 0))[pos_oxy]
 
     oxy_spread = bfs(map, pos_oxy)
     s2 = max(oxy_spread.values())
