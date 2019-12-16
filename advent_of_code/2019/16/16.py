@@ -4,6 +4,7 @@ import numpy as np
 
 
 def fft(pattern, nphase, v):
+    v = np.array(v)
     n, k = len(v), len(pattern)
     patter_exp = np.array(
         [
@@ -18,14 +19,26 @@ def fft(pattern, nphase, v):
     return v
 
 
+def fft_trick(offset, nphase, v):
+    assert offset > len(v) // 2
+    v = v[offset:]
+    for _ in range(nphase):
+        for i in range(len(v) - 2, -1, -1):
+            v[i] = abs(v[i + 1] + v[i]) % 10
+    return v
+
+
 def main():
     nphase = 100
     pattern = np.array([0, 1, 0, -1])
-    input = np.array([int(digit) for digit in open('input').read().strip()])
+    input = [int(digit) for digit in open('input').read().strip()]
+    offset = int(''.join(str(x) for x in input[:7]))
 
     s1 = ''.join(str(d) for d in fft(pattern, nphase, input)[:8])
+    s2 = ''.join(str(d) for d in fft_trick(offset, nphase, input * 10000)[:8])
 
     print(s1)
+    print(s2)
 
 
 main()
