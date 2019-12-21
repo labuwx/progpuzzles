@@ -1,0 +1,20 @@
+# jump as soon as possible,
+# but only jump to a tile if we can escape from there
+# J = D and (not (A and B and C)) and (E or H)
+
+# J = A and B and C
+NOT J J  # J = true
+AND A J
+AND B J
+AND C J
+
+NOT J J
+AND D J
+
+# T = E or H
+OR E T
+OR H T
+
+AND T J
+
+RUN

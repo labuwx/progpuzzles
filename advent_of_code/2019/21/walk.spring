@@ -1,0 +1,13 @@
+# jump as soon as possible
+# J = D and not (A and B and C)
+
+# J = A and B and C
+NOT J J  # J = true
+AND A J
+AND B J
+AND C J
+
+NOT J J
+AND D J
+
+WALK
