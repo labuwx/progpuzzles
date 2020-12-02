@@ -45,6 +45,10 @@ def execute(prog, vals=None):
         dst = stack[-1]
         p = prog[dst]
 
+        if dst in vals:
+            stack.pop()
+            continue
+
         args = []
         for src in p['src']:
             if isinstance(src, int):
