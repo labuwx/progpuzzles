@@ -4,11 +4,27 @@ from collections import defaultdict
 import itertools as it
 import re
 
+import numpy as np
+from PIL import Image
+
 
 pattern = re.compile(
     r'^(?P<cmd>turn on|toggle|turn off) (?P<x1>\d+),(?P<y1>\d+) through (?P<x2>\d+),(?P<y2>\d+)$'
 )
 cmd_map = {'turn on': '+', 'turn off': '-', 'toggle': '*'}
+
+
+def draw(grid, bin=False):
+    dims = (1000, 1000)
+    max_br = 2 ** 8 - 1
+    data = np.zeros(dims, dtype=np.uint8)
+
+    for p, v in grid.items():
+        data[p] = min((max_br * v if bin else v), max_br)
+
+    image = Image.fromarray(data)
+    image.show()
+    input("Press Enter to continue...")
 
 
 def main():
@@ -35,6 +51,7 @@ def main():
             else:
                 grid[pixel] = (grid[pixel] + 1) % 2
     s1 = sum(grid.values())
+    grid1 = grid
 
     grid = defaultdict(int)
     for cmd, (x1, y1), (x2, y2) in instr:
@@ -46,9 +63,13 @@ def main():
             else:
                 grid[pixel] += 2
     s2 = sum(grid.values())
+    grid2 = grid
 
     print(s1)
     print(s2)
+
+    # draw(grid1, bin=True)
+    # draw(grid2, bin=False)
 
 
 main()
