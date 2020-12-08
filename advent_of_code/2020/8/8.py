@@ -4,7 +4,7 @@
 def exec(instr):
     acc, ip = 0, 0
     ins_vis = set()
-    while ip < len(instr):
+    while ip in range(len(instr)):
         ins_vis.add(ip)
         cmd, val = instr[ip]
         if cmd == 'acc':
