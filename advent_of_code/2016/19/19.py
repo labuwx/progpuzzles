@@ -10,15 +10,13 @@ def josephus(n):
 
 
 def wins2_alt(n):
-    res = [None] * (n + 1)
-    res[1] = 0
+    wp = 0
     for k in range(2, n + 1):
         killed = k // 2
-        wp = res[k - 1]
         wp = (wp + 1) % (k - 1)
-        res[k] = wp if wp < killed else wp + 1
+        wp = wp if wp < killed else wp + 1
 
-    return res[n] + 1
+    return wp + 1
 
 
 def wins2(n):
