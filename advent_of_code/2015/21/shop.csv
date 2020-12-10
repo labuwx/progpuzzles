@@ -1,0 +1,17 @@
+name type cost dmg armor
+Dagger weapon 8 4 0
+Shortsword weapon 10 5 0
+Warhammer weapon 25 6 0
+Longsword weapon 40 7 0
+Greataxe weapon 74 8 0
+Leather armor 13 0 1
+Chainmail armor 31 0 2
+Splintmail armor 53 0 3
+Bandedmail armor 75 0 4
+Platemail armor 102 0 5
+Damage+1 ring 25 1 0
+Damage+2 ring 50 2 0
+Damage+3 ring 100 3 0
+Defense+1 ring 20 0 1
+Defense+2 ring 40 0 2
+Defense+3 ring 80 0 3
