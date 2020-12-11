@@ -19,6 +19,10 @@ def cadd(*args):
     return tuple(sum(coords) for coords in zip(*args))
 
 
+def inrange(a, b, c):
+    return all(ai <= bi < ci for ai, bi, ci in zip(a, b, c))
+
+
 def main():
     input = open('input').read().strip().split('\n')
     map = [list(l) for l in input]
@@ -50,7 +54,7 @@ def main():
         for dir in dirs:
             next_pos = cadd(pos, dir)
             v = map[next_pos]
-            if not ((0, 0) <= next_pos < shape) or v == '#':
+            if not inrange((0, 0), next_pos, shape) or v == '#':
                 continue
             next_rnum = rnum | ({v} if isinstance(v, int) else set())
             adj.add((next_pos, next_rnum))
