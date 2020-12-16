@@ -35,8 +35,8 @@ def neighbours(seats, pos, look_far):
 
 
 def arrange(seats, look_far=False, sticky_seat=False):
-    for i in it.count():
-        print(i)
+    change = True
+    while change:
         new_seats = np.empty_like(seats)
         change = False
         for pos, x in np.ndenumerate(seats):
@@ -53,8 +53,7 @@ def arrange(seats, look_far=False, sticky_seat=False):
             change = change or v != x
 
         seats = new_seats
-        if not change:
-            return seats
+    return seats
 
 
 def main():
