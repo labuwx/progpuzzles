@@ -27,9 +27,16 @@ def play(hp0, mana0, boss, dhard=False):
     # mana spent, rnd, turn, (hp, mana), boss hp, {(speel name, time remaining)}
     v = (0, next(rnd), 0, (hp0, mana0), boss['hp'], {})
     to_visit = [v]
-    seen = {state(v)}
+    seen = set()
     while to_visit:
-        d, _, turn, (hp, mana), boss_hp, active_spells = heapq.heappop(to_visit)
+        v = heapq.heappop(to_visit)
+        sv = state(v)
+        if sv in seen:
+            continue
+        else:
+            seen.add(sv)
+
+        d, _, turn, (hp, mana), boss_hp, active_spells = v
 
         armor = 0
         rem_spells = {}
@@ -54,10 +61,7 @@ def play(hp0, mana0, boss, dhard=False):
             hp -= max(1, boss['dmg'] - armor)
             if hp > 0:
                 v = (d, next(rnd), turn + 1, (hp, mana), boss_hp, rem_spells)
-                sv = state(v)
-                if sv not in seen:
-                    seen.add(sv)
-                    heapq.heappush(to_visit, v)
+                heapq.heappush(to_visit, v)
         else:
             hp -= dhard
             if hp <= 0:
@@ -76,10 +80,7 @@ def play(hp0, mana0, boss, dhard=False):
                     boss_hp,
                     cp_rem_spells,
                 )
-                sv = state(v)
-                if sv not in seen:
-                    seen.add(sv)
-                    heapq.heappush(to_visit, v)
+                heapq.heappush(to_visit, v)
 
 
 def main():
