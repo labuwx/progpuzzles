@@ -50,34 +50,26 @@ def eval_simple(tokens):
 
 
 def eval_hard(tokens):
-    q = deque(tokens + [None])
+    outq, opq = deque(), deque()
 
-    plevel = 0
-    while (t := q.popleft()) != None:
-        if t == '(':
-            if plevel == 0:
-                sub_expr = []
-            else:
-                sub_expr.append(t)
-            plevel += 1
+    for t in tokens + [')']:
+        if isinstance(t, int):
+            outq.append(t)
+        elif t == '(':
+            opq.append(t)
         elif t == ')':
-            plevel -= 1
-            if plevel == 0:
-                q.append(eval_hard(sub_expr))
-            else:
-                sub_expr.append(t)
+            while opq and (op := opq.pop()) != '(':
+                a2, a1 = outq.pop(), outq.pop()
+                outq.append(opmap[op](a1, a2))
         else:
-            (q if plevel == 0 else sub_expr).append(t)
+            while opq and (opq[-1] == '+' or (opq[-1] == '*' and t == '*')):
+                op = opq.pop()
+                a2, a1 = outq.pop(), outq.pop()
+                outq.append(opmap[op](a1, a2))
+            opq.append(t)
 
-    for opt, op in opmap.items():
-        q.append(None)
-        while (t := q.popleft()) != None:
-            if t == opt:
-                q.append(op(q.pop(), q.popleft()))
-            else:
-                q.append(t)
-
-    return q[0]
+    assert len(outq) == 1
+    return outq[0]
 
 
 def main():
