@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import itertools as it
-import numpy as np
-
 
 navmap = {'E': (1, 0), 'W': (-1, 0), 'N': (0, 1), 'S': (0, -1)}
 
