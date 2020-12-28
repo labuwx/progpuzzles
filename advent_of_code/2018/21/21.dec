@@ -1,0 +1,32 @@
+ 0:     rd = 123
+ 1:     rd = rd & 456
+ 2:     rd = int(rd == 72)
+ 3:     ip = rd + 3
+ 4:     ip = 0
+
+ 5:     rd = 0
+ 6:     rc = rd | 65536
+ 7:     rd = 12670166
+ 8:     rb = rc & 255
+ 9:     rd = rd + rb
+10:     rd = rd & 16777215
+11:     rd = rd * 65899
+12:     rd = rd & 16777215
+13:     rb = int(256 > rc)
+14:     ip = rb + 14
+15:     ip = 15 + 1
+16:     ip = 27
+17:     rb = 0
+18:     re = rb + 1
+19:     re = re * 256
+20:     re = int(re > rc)
+21:     ip = re + 21
+22:     ip = 22 + 1
+23:     ip = 25
+24:     rb = rb + 1
+25:     ip = 17
+26:     rc = rb
+27:     ip = 7
+28:     rb = int(rd == ra)
+29:     ip = rb + 29
+30:     ip = 5
