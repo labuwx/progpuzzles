@@ -63,7 +63,7 @@ def simulate(map, units, elf_power=3, stop_elfdead=False):
     nc = {t: sum(u[1] == t for u in units.values()) for t in 'EG'}
     units = copy.deepcopy(units)
     # draw_map(map, units)
-    round = 0
+    round, incomplete_rnd = 0, False
     while nc['G'] * nc['E']:
         round += 1
         order = sorted(units.keys(), key=lambda u: units[u][0])
@@ -72,6 +72,9 @@ def simulate(map, units, elf_power=3, stop_elfdead=False):
                 continue
             pp, tt, hh = units[u]
             enemies = {p for p, t, _ in units.values() if t != tt}
+            if len(enemies) == 0:
+                incomplete_rnd = True
+                break
             en_adj = {add(e, d) for e in enemies for d in directions} & map
             if pp not in en_adj:
                 oq = set(p for p, _, _ in units.values())
@@ -104,12 +107,29 @@ def simulate(map, units, elf_power=3, stop_elfdead=False):
                     units[i] = (ep, et, eh)
         # draw_map(map, units, round)
     hp_remained = sum(h for _, _, h in units.values())
-    return round - 1, hp_remained
+    return round - 1 if incomplete_rnd else round, hp_remained
+
+
+def exp_search(f, n_min):
+    n = max(1, n_min)
+    while not f(n):
+        n *= 2
+
+    n_max = n
+    while n_min < n_max - 1:
+        n = n_min + (n_max - n_min) // 2
+        if f(n):
+            n_max = n
+        else:
+            n_min = n
+
+    return n_min if f(n_min) else n_max
 
 
 def main():
     global height, width
     input = open('input').read().strip()
+    # input = open('input_sample').read().strip()
 
     map, units = set(), {}
     for y, line in enumerate(input.split('\n')):
@@ -124,9 +144,11 @@ def main():
     s1 = simulate(map, units)
     s1 = s1[0] * s1[1]
 
-    for elf_power in it.count(4):
-        if (s2 := simulate(map, units, elf_power=elf_power, stop_elfdead=True)) != None:
-            break
+    f = lambda elf_power: (
+        simulate(map, units, elf_power=elf_power, stop_elfdead=True) != None
+    )
+    elf_power = exp_search(f, 4)
+    s2 = simulate(map, units, elf_power=elf_power, stop_elfdead=True)
     s2 = s2[0] * s2[1]
 
     print(s1)
