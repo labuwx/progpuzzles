@@ -21,7 +21,7 @@ def inters(b1, b2):
     return manhattan(b1[0], b2[0]) <= b1[1] + b2[1]
 
 
-def merge(l1, l2, xmin=0):
+def merge(l1, l2):
     l = []
     i = j = 0
     while i < len(l1) and j < len(l2):
@@ -31,8 +31,7 @@ def merge(l1, l2, xmin=0):
         elif x1 > x2:
             j += 1
         else:
-            if x1 >= xmin:
-                l.append(x1)
+            l.append(x1)
             i += 1
             j += 1
     return l
@@ -81,19 +80,24 @@ def main():
     maxbot = max(nanobots, key=lambda bot: bot[1])
     s1 = sum(inrange(maxbot, bot[0]) for bot in nanobots)
 
+    # the spheres (octahedra in Eucl^3) around the bots form a Helly family of order 2
+    # proof: the bounded area is described by 4 pairs of parallel planes
+    # proof: which are given by 4 Real intervals
+    # proof: Real intervals are Helly-2 and the 4 coordinates are independent in this regard
     inters_map = [
-        [j for j, b2 in enumerate(nanobots) if i != j and inters(b1, b2)]
+        [j for j, b2 in enumerate(nanobots) if i < j and inters(b1, b2)]
         for i, b1 in enumerate(nanobots)
     ]
 
     rnd = it.count()
     ins_max, selections = 0, []
-    q = [(0, -len(nanobots), next(rnd), [], list(range(len(nanobots))))]
+    q = [(-len(nanobots), 0, next(rnd), [], list(range(len(nanobots))))]
     while q:
         *_, sel, rem = heapq.heappop(q)
 
+        # the queue is sorted by this metric, we will not miss bigger / additional sets of bots
         if len(sel) + len(rem) < ins_max:
-            continue
+            break
 
         if ins_max < len(sel):
             ins_max = len(sel)
@@ -103,9 +107,11 @@ def main():
             selections.append(sel)
 
         for i in rem:
-            nrem = merge(rem, inters_map[i], i)
+            nrem = merge(rem, inters_map[i])
             nsel = sel + [i]
-            heapq.heappush(q, (-len(sel), -len(rem), next(rnd), nsel, nrem))
+            heapq.heappush(
+                q, (-len(nsel) - len(nrem), -len(sel), next(rnd), nsel, nrem)
+            )
 
     s2 = min(
         solve(bound_intersection([bounding_planes(nanobots[i]) for i in sel]))
