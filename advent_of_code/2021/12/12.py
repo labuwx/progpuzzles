@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from collections import Counter, defaultdict, deque
+from collections import defaultdict, deque
 
 
 # limitation
@@ -17,10 +17,10 @@ def parse_input(input):
 
 
 def traverse(nbrs, revisit_small_cave=False):
-    q = deque([(START_NODE, {START_NODE}, None)])
+    q = deque([(START_NODE, {START_NODE}, False)])
     path_cnt = 0
     while q:
-        u, visited, revisited_cave = q.pop()
+        u, visited, cave_revisited = q.pop()
 
         if u == END_NODE:
             path_cnt += 1
@@ -28,9 +28,9 @@ def traverse(nbrs, revisit_small_cave=False):
 
         for v in nbrs[u]:
             if v.isupper() or v not in visited:
-                q.append((v, visited | {v}, revisited_cave))
-            elif revisit_small_cave and revisited_cave is None:
-                q.append((v, visited | {v}, v))
+                q.append((v, visited | {v}, cave_revisited))
+            elif revisit_small_cave and not cave_revisited:
+                q.append((v, visited | {v}, True))
 
     return path_cnt
 
