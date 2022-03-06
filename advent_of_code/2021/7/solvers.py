@@ -83,6 +83,11 @@ def solve2_1(input):
 
 
 # bisect search
+# instead of the smooth function
+# consider the function that is equal to the smooth fx at integer points
+# and is linearly interpolated inbetween
+# that is still a convex function but makes the following code easier to reson about
+# because the optimum range of this fx must contain an integer
 def solve2_2(input):
     cost = lambda pos: sum(linsum(abs(pos - pi)) for pi in input)
     m, M = min(input), max(input)
@@ -98,11 +103,13 @@ def solve2_2(input):
         else:  # grad > 0
             M = mid
 
-    # if m + 1 == M: m cannot have lower cost
+    # if m + 1 == M: m cannot have lower cost (unless min(input) is already an optimum)
     # for m to be the only optimum, it must have been a mid first
     # but then that mid would have had a >0 grad
     # so we would have moved M there, not m; -><-
-    return cost(M)
+    c = min(cost(m), cost(M))
+
+    return c
 
 
 # based on a paper by CrashAndSideburns:
