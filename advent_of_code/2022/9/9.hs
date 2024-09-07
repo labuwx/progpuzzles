@@ -43,34 +43,41 @@ dPd DLeft = (-1, 0)
 dPd DRight = (1, 0)
 
 
-type VisState = State.State (Pos, Pos, Set.Set Pos)
+type VisState = State.State ([Pos], [Set.Set Pos])
 
 
-countVisited :: [Mot] -> Int
+countVisited :: [Mot] -> [Int]
 countVisited mots =
-    flip State.evalState ((0, 0), (0, 0), Set.singleton (0, 0)) $
+    flip State.evalState ([(0, 0) | _ <- [0 .. 9]], [Set.singleton (0, 0) | _ <- [0 .. 9]]) $
         ( do
             simulate mots
-            (\(_, _, s) -> Set.size s) <$> State.get
+            (\s -> map Set.size (snd s)) <$> State.get
         )
   where
     simulate :: [Mot] -> VisState ()
     simulate [] = return ()
     simulate ((dir, n) : mots) = do
-        (hp, tp, tps) <- State.get
-        let (hp', tp') = step dir (hp, tp)
-        State.put (hp', tp', Set.insert tp' tps)
+        (poss, hist) <- State.get
+        let poss' = step dir poss
+        let hist' = [Set.insert p h | (p, h) <- zip poss' hist]
+        State.put (poss', hist')
         simulate (if n > 1 then (dir, n - 1) : mots else mots)
 
-    step :: Dir -> (Pos, Pos) -> (Pos, Pos)
-    step dir (hp, tp) = (hp', tp')
+    follow :: Pos -> [Pos] -> [Pos]
+    follow _ [] = []
+    follow prev (tp : tps) = tp' : follow tp' tps
       where
-        hp' = pAdd hp $ dPd dir
-        (dx, dy) = pSub hp' tp
+        (dx, dy) = pSub prev tp
         tp' =
             if abs (dx) <= 1 && abs (dy) <= 1
                 then tp
                 else pAdd tp (signum dx, signum dy)
+
+    step :: Dir -> [Pos] -> [Pos]
+    step dir (hp : tps) = hp' : tps'
+      where
+        hp' = pAdd hp $ dPd dir
+        tps' = follow hp' tps
 
 
 main = do
@@ -78,8 +85,9 @@ main = do
     -- content <- readFile "input_test"
     let dirs = parseInput content
 
-    let s1 = countVisited dirs
-    let s2 = 0
+    let s = countVisited dirs
+    let s1 = s !! 1
+    let s2 = s !! 9
 
     print s1
     print s2
