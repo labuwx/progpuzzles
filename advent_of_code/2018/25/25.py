@@ -41,7 +41,7 @@ def main():
     data = [tuple((int(x) for x in l.split(','))) for l in input]
 
     uf = UF(len(data))
-    for (i, p), (j, q) in it.product(enumerate(data), repeat=2):
+    for (i, p), (j, q) in it.combinations(enumerate(data), 2):
         if manhattan(p, q) <= 3:
             uf.union(i, j)
 
